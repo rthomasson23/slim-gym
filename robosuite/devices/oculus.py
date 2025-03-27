@@ -7,8 +7,8 @@ from collections import namedtuple
 
 
 import numpy as np
-import rospy
-from sensor_msgs.msg import Joy
+# import rospy
+# from sensor_msgs.msg import Joy
 import glfw
 import sys
 import copy 

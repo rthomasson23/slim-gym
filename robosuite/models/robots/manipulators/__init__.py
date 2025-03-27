@@ -10,3 +10,4 @@ from .panda_wrist_robot import PandaWrist
 from .panda_sslim import PandaSSLIM
 from .panda_sslimOG import PandaSSLIMOG
 from .flexiv import Flexiv
+from .panda_leap import PandaLEAP
