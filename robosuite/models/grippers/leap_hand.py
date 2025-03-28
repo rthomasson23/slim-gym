@@ -23,7 +23,33 @@ class LEAP_Hand(GripperModel):
 
     @property
     def init_qpos(self):
-        return np.zeros(16)
+        init = np.zeros(16) + 1
+        return init
+        np.array([
+        # Index finger
+        -0.1,    # if_mcp
+         0.0,    # if_rot
+        -0.5,    # if_pip
+        -0.36,   # if_dip
+
+        # Middle finger
+        -0.1,    # mf_mcp
+         0.0,    # mf_rot
+        -0.5,    # mf_pip
+        -0.36,   # mf_dip
+
+        # Ring finger
+        -0.1,    # rf_mcp
+         0.0,    # rf_rot
+        -0.5,    # rf_pip
+        -0.36,   # rf_dip
+
+        # Thumb
+        -0.1,    # th_cmc
+        -0.3,    # th_axl
+        -0.4,    # th_mcp
+        -1.2     # th_ipl
+    ])
 
     @property
     def _important_geoms(self):

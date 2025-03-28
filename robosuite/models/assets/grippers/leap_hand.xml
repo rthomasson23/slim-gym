@@ -63,7 +63,7 @@ Naming Conventions
 -->
 
 <mujoco model="leap_rh">
-  <compiler angle="radian" meshdir="meshes"/>
+  <compiler angle="radian" meshdir="meshes" timestep="0.002"/>
   <option integrator="implicitfast" cone="elliptic" impratio="100"/>
 
   <!-- mesh assets -->
@@ -85,11 +85,14 @@ Naming Conventions
   <!-- defaults -->
   <default>
     <!-- constraint stiffness -->
-    <geom solimp="0.999 0.999 0.001 0.0001 1" solref="0.0001 1" friction=".2"/>
+
+    <!-- <geom solimp="0.999 0.999 0.001 0.0001 1" solref="0.0001 1" friction=".2"/> -->
+   <geom solimp="0.9 0.95 0.001" solref="0.005 1" friction="0.8"/>
 
     <!-- actuator defaults -->
     <position kp="3.0" kv="0.01" />
-    <joint damping="0.03" frictionloss="0.001"/>
+    <joint damping="1.0" frictionloss="0.01"/>
+    <!-- <joint damping="0.03" frictionloss="0.001"/> -->
 
     <!-- geom class defaults -->
     <default class="visual">
@@ -171,6 +174,30 @@ Naming Conventions
     <exclude body1="th_mp" body2="if_bs" />
     <exclude body1="th_mp" body2="mf_bs" />
     <exclude body1="th_mp" body2="rf_bs" />
+<!-- 
+    <exclude body1="if_bs" body2="if_px"/>
+    <exclude body1="if_px" body2="if_md"/>
+    <exclude body1="if_md" body2="if_ds"/>
+
+    <exclude body1="mf_bs" body2="mf_px"/>
+    <exclude body1="mf_px" body2="mf_md"/>
+    <exclude body1="mf_md" body2="mf_ds"/>
+    <exclude body1="rf_bs" body2="rf_px"/>
+    <exclude body1="rf_px" body2="rf_md"/>
+    <exclude body1="rf_md" body2="rf_ds"/>
+    <exclude body1="th_mp" body2="th_bs"/>
+    <exclude body1="th_bs" body2="th_px"/>
+    <exclude body1="th_px" body2="th_ds"/>
+    <exclude body1="if_ds" body2="mf_ds"/>
+    <exclude body1="mf_ds" body2="rf_ds"/>
+    <exclude body1="if_md" body2="mf_md"/>
+    <exclude body1="mf_md" body2="rf_md"/>
+    <exclude body1="if_px" body2="mf_px"/>
+    <exclude body1="mf_px" body2="rf_px"/>
+    <exclude body1="th_ds" body2="if_ds"/>
+    <exclude body1="th_ds" body2="mf_ds"/>
+    <exclude body1="th_px" body2="if_md"/>
+    <exclude body1="th_px" body2="mf_md"/> -->
   </contact>
 
   <!-- actuators -->

@@ -232,7 +232,7 @@ if __name__ == "__main__":
         prompt_user_for_input(f"The next task: {task_names[task]}. Check out the task summary, then press any key to continue.")
        
         # Randomly order the robot options
-        # robots = ["PandaLEAP","Panda", "PandaWrist", "PandaSSLIM", ]
+        # robots = ["Panda", "PandaWrist", "PandaSSLIM", ]
         robots = ["PandaLEAP","PandaLEAP", "PandaLEAP", "PandaLEAP", ]
        
         if "Train" not in task:

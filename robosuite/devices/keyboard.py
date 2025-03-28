@@ -62,7 +62,7 @@ class Keyboard(Device):
         self.rotation = np.array([[-1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, -1.0]])
         self.raw_drotation = np.zeros(3)  # immediate roll, pitch, yaw delta values from keyboard hits
         self.last_drotation = np.zeros(3)
-        self.dq = np.zeros(9)  # Gripper DOFs
+        self.dq = np.zeros(16)  # Gripper DOFs
         self.pos = init_pos  # (x, y, z)
         self.last_pos = np.zeros(3)
         self.grasp = False
@@ -190,6 +190,45 @@ class Keyboard(Device):
                 self.dq[4] -= self.alpha * self.pos_sensitivity
                 self.dq[5] -= self.alpha * self.pos_sensitivity
                 self.dq[6] -= self.alpha2 * self.pos_sensitivity
+
+        if key == glfw.KEY_I:
+            if self.dq[0] <= 1.5:
+                self.dq[0] += self.alpha * self.pos_sensitivity
+                # self.dq[1] += self.alpha2 * self.pos_sensitivity
+                self.dq[2] += self.alpha * self.pos_sensitivity
+                self.dq[3] += self.alpha2 * self.pos_sensitivity
+                self.dq[4] += self.alpha * self.pos_sensitivity
+                # self.dq[5] += self.alpha * self.pos_sensitivity
+                self.dq[6] += self.alpha2 * self.pos_sensitivity
+                self.dq[7] += self.alpha * self.pos_sensitivity
+                self.dq[8] += self.alpha2 * self.pos_sensitivity
+                # self.dq[9] += self.alpha * self.pos_sensitivity
+                self.dq[10] += self.alpha2 * self.pos_sensitivity
+                self.dq[11] += self.alpha * self.pos_sensitivity
+                # self.dq[12] += self.alpha * self.pos_sensitivity
+                self.dq[13] += self.alpha2 * self.pos_sensitivity
+                self.dq[14] += self.alpha * self.pos_sensitivity
+                self.dq[15] += self.alpha2 * self.pos_sensitivity
+
+
+        if key == glfw.KEY_O:
+            if self.dq[0] >= -1:
+                self.dq[0] -= self.alpha * self.pos_sensitivity
+                # self.dq[1] -= self.alpha2 * self.pos_sensitivity
+                self.dq[2] -= self.alpha * self.pos_sensitivity
+                self.dq[3] -= self.alpha2 * self.pos_sensitivity
+                self.dq[4] -= self.alpha * self.pos_sensitivity
+                # self.dq[5] -= self.alpha * self.pos_sensitivity
+                self.dq[6] -= self.alpha2 * self.pos_sensitivity
+                self.dq[7] -= self.alpha * self.pos_sensitivity
+                self.dq[8] -= self.alpha2 * self.pos_sensitivity
+                # self.dq[9] -= self.alpha * self.pos_sensitivity
+                self.dq[10] -= self.alpha2 * self.pos_sensitivity
+                self.dq[11] -= self.alpha * self.pos_sensitivity
+                # self.dq[12] -= self.alpha * self.pos_sensitivity
+                self.dq[13] -= self.alpha2 * self.pos_sensitivity
+                self.dq[14] -= self.alpha * self.pos_sensitivity
+                self.dq[15] -= self.alpha2 * self.pos_sensitivity
 
 
 
