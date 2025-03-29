@@ -7,3 +7,4 @@ from .empty_arena import EmptyArena
 from .wipe_arena import WipeArena
 from .drawer_arena import DrawerArena
 from  .cabinet_arenaNEW import CabinetArenaNEW
+from .cluttered_cabinet import ClutteredCabinet
