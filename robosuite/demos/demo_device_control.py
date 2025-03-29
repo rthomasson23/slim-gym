@@ -164,7 +164,7 @@ if __name__ == "__main__":
         **config,
         has_renderer=True,
         has_offscreen_renderer=False,
-        render_camera="cabinetview",
+        render_camera="birdview",
         ignore_done=True,
         use_camera_obs=False,
         reward_shaping=True,

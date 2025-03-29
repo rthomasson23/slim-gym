@@ -294,50 +294,29 @@ class SequentialPick(SingleArmEnv):
         )
 
 
-        self.front_row = [BoxObject(
-            name=f"front_row{x}",
-            size=[0.035, 0.062, 0.062],
-            rgba=[1, 0, 0, 1],
-            material=redwood,
-            density=250,
-        ) for x in range(3)]
-
-        self.middle_row = [BoxObject(
-            name=f"middle_row{x}",
-            size=[0.035, 0.062, 0.062],
-            rgba=[1, 0, 0, 1],
-            material=redwood,
-            density=250,
-        ) for x in range(3)]
-
-        self.back_row = [BoxObject(
-            name=f"back_row{x}",
-            size=[0.035, 0.062, 0.062],
-            rgba=[1, 0, 0, 1],
-            material=redwood,
-            density=250,
-        ) for x in range(2)]
-
-        
-
-        self.goal_object = [BoxObject(
-            name=f"goal_object",
-            size=[0.035, 0.062, 0.062],
+        self.goal_object_1 = [CylinderObject(
+            name=f"goal_object_1",
+            size=[0.035, 0.062],
             rgba=[0.2, 1, 0.5, 1],
             material=greenwood,
             density=250,
         )]
 
-        self.objects = self.front_row + self.middle_row + self.back_row
+        self.goal_object_2 = [CylinderObject(
+            name=f"goal_object_2",
+            size=[0.035, 0.062],
+            rgba=[0.2, 1, 0.5, 1],
+            material=greenwood,
+            density=250,
+        )]
 
        
-
         # Create placement initializer
-        self.placement_initializer = UniformRandomSampler(
+        self.placement_initializer_1 = UniformRandomSampler(
             name="ObjectSampler",
-            mujoco_objects=self.front_row + self.goal_object,
-            x_range=[-0.10, -0.09],
-            y_range=[-1, 1],
+            mujoco_objects=self.goal_object_1,
+            x_range=[0.024, 0.034],
+            y_range=[-0.24, -0.1],
             ensure_object_boundary_in_range=False,
             ensure_valid_placement=True,
             reference_pos=self.table_offset,
@@ -346,12 +325,11 @@ class SequentialPick(SingleArmEnv):
             z_offset=0.01,
         )
 
-        # Create placement initializer
-        self.placement_initializer2 = UniformRandomSampler(
+        self.placement_initializer_2 = UniformRandomSampler(
             name="ObjectSampler",
-            mujoco_objects=self.middle_row,
-            x_range=[-0.01, 0.0],
-            y_range=[-0.23, .23],
+            mujoco_objects=self.goal_object_2,
+            x_range=[0.024, 0.034],
+            y_range=[0.1, 0.24],
             ensure_object_boundary_in_range=False,
             ensure_valid_placement=True,
             reference_pos=self.table_offset,
@@ -360,28 +338,13 @@ class SequentialPick(SingleArmEnv):
             z_offset=0.01,
         )
 
-        # Create placement initializer
-        self.placement_initializer3 = UniformRandomSampler(
-            name="ObjectSampler",
-            mujoco_objects=self.back_row,
-            x_range=[0.1, 0.11],
-            y_range=[-0.2, .2],
-            ensure_object_boundary_in_range=False,
-            ensure_valid_placement=True,
-            reference_pos=self.table_offset,
-            rotation_axis='z',
-            rotation=[0],
-            z_offset=0.01,
-        )
 
         # task includes arena, robot, and objects of interest
         self.model = ManipulationTask(
             mujoco_arena=mujoco_arena,
             mujoco_robots=[robot.robot_model for robot in self.robots],
-            mujoco_objects=self.objects + self.goal_object,
+            mujoco_objects=self.goal_object_1 + self.goal_object_2,
         )
-
-        self.initial_obstacle_positions = np.zeros((3, len(self.objects)))
 
     def _setup_references(self):
         """
@@ -392,10 +355,8 @@ class SequentialPick(SingleArmEnv):
         super()._setup_references()
 
         # Additional object references from this env
-        self.goal_object_body_id = self.sim.model.body_name2id(self.goal_object[0].root_body)
-        self.obstacle_ids = []
-        for i in range(len(self.objects)):
-            self.obstacle_ids.append(self.sim.model.body_name2id(self.objects[i].root_body))
+        self.goal_object_1_body_id = self.sim.model.body_name2id(self.goal_object_1[0].root_body)
+        self.goal_object_2_body_id = self.sim.model.body_name2id(self.goal_object_2[0].root_body)
 
 
     def _setup_observables(self):
@@ -428,45 +389,19 @@ class SequentialPick(SingleArmEnv):
             if self.trial_counter > 5:
                 exit()
 
-            object_counter = 0
             # Sample from the placement initializer for all objects
-            object_placements = self.placement_initializer.sample()
+            object_placements_1 = self.placement_initializer_1.sample()
+            object_placements_2 = self.placement_initializer_2.sample()
 
-            n = len(object_placements)
-            y_range = np.linspace(-0.24, 0.24, n)
-            y_range = np.random.permutation(y_range)
             count = 0
             # Loop through all objects and reset their positions
-            for obj_pos, obj_quat, obj in object_placements.values():
-                obj_pos = list(obj_pos)
-                obj_pos[1] = y_range[count]
+            for obj_pos, obj_quat, obj in object_placements_1.values():
                 count += 1
                 self.sim.data.set_joint_qpos(obj.joints[0], np.concatenate([np.array(obj_pos), np.array(obj_quat)]))
+
+            for obj_pos, obj_quat, obj in object_placements_2.values():
+                self.sim.data.set_joint_qpos(obj.joints[0], np.concatenate([np.array(obj_pos), np.array(obj_quat)]))
                 
-                if obj.name != "goal_object":
-                    self.initial_obstacle_positions[:,object_counter] = obj_pos
-                    object_counter += 1
-
-            # Sample from the placement initializer for all objects
-            object_placements2 = self.placement_initializer2.sample()
-
-        
-            # Loop through all objects and reset their positions
-            for obj_pos, obj_quat, obj in object_placements2.values():
-                self.sim.data.set_joint_qpos(obj.joints[0], np.concatenate([np.array(obj_pos), np.array(obj_quat)]))
-                self.initial_obstacle_positions[:,object_counter] = obj_pos
-                object_counter += 1
-
-            # Sample from the placement initializer for all objects
-            object_placements3 = self.placement_initializer3.sample()
-
-        
-            # Loop through all objects and reset their positions
-            for obj_pos, obj_quat, obj in object_placements3.values():
-                self.sim.data.set_joint_qpos(obj.joints[0], np.concatenate([np.array(obj_pos), np.array(obj_quat)]))
-                self.initial_obstacle_positions[:,object_counter] = obj_pos
-                object_counter += 1
-
 
     def visualize(self, vis_settings):
         """
@@ -481,10 +416,6 @@ class SequentialPick(SingleArmEnv):
         # super().visualize(vis_settings={vis: False for vis in self._visualizations})
         super().visualize(vis_settings={vis: True for vis in self._visualizations})
 
-        # Color the gripper visualization site according to its distance to the cube
-        # if vis_settings["grippers"]:
-        #     self._visualize_gripper_to_target(gripper=self.robots[0].gripper, target=self.goal_object[0])
-
     def _check_success(self):
         """
         Check if object has been removed from the cabinet.
@@ -492,38 +423,40 @@ class SequentialPick(SingleArmEnv):
         Returns:
             bool: True if object has beenr removed. 
         """
-        goal_object_pos = self.sim.data.body_xpos[self.goal_object_body_id]
-        self.goal_object_pos = goal_object_pos
-        self.goal_object_ori = self.sim.data.body_xquat[self.goal_object_body_id]
-        table_height = self.model.mujoco_arena.table_offset[2]
+        pass
+        # goal_object_pos = self.sim.data.body_xpos[self.goal_object_body_id]
+        # self.goal_object_pos = goal_object_pos
+        # self.goal_object_ori = self.sim.data.body_xquat[self.goal_object_body_id]
+        # table_height = self.model.mujoco_arena.table_offset[2]
 
-        # object is higher than the table top above a margin
-        lifted_bool = goal_object_pos[2] > table_height + 0.08
-        removed_bool = goal_object_pos[0] < -0.02
+        # # object is higher than the table top above a margin
+        # lifted_bool = goal_object_pos[2] > table_height + 0.08
+        # removed_bool = goal_object_pos[0] < -0.02
 
-        elapsed_time = time.time() - self.start_time
+        # elapsed_time = time.time() - self.start_time
 
-        total_disturbance, num_fallen_objects = self._calculate_disturbance()
+        # total_disturbance, num_fallen_objects = self._calculate_disturbance()
         
-        if lifted_bool and removed_bool:
-            print("Success! Time: {}".format(elapsed_time))
-            print("Disturbance: {}".format(total_disturbance))
-            return True, True, elapsed_time, total_disturbance, num_fallen_objects, self.trial_counter-1
-        elif (elapsed_time > 60) or (goal_object_pos[2] < 0.5):
-            return True, False, elapsed_time, total_disturbance, num_fallen_objects, self.trial_counter-1
-        else: 
-            return False, False, None, None, None, self.trial_counter-1
+        # if lifted_bool and removed_bool:
+        #     print("Success! Time: {}".format(elapsed_time))
+        #     print("Disturbance: {}".format(total_disturbance))
+        #     return True, True, elapsed_time, total_disturbance, num_fallen_objects, self.trial_counter-1
+        # elif (elapsed_time > 60) or (goal_object_pos[2] < 0.5):
+        #     return True, False, elapsed_time, total_disturbance, num_fallen_objects, self.trial_counter-1
+        # else: 
+        #     return False, False, None, None, None, self.trial_counter-1
     
     def _calculate_disturbance(self):
-        disturbance = 0
-        fall_penalty = 0.5
-        num_fallen_objects = 0
-        for i in range(len(self.objects)):
-            pos = self.sim.data.body_xpos[self.obstacle_ids[i]]
-            if pos[2] < 0.5: # if object is on the ground, penalize that
-                disturbance += fall_penalty
-                num_fallen_objects += 1
-            else:
-                initial_pos = self.initial_obstacle_positions[:,i]
-                disturbance += np.linalg.norm(pos - initial_pos)
-        return disturbance, num_fallen_objects
+        pass
+        # disturbance = 0
+        # fall_penalty = 0.5
+        # num_fallen_objects = 0
+        # for i in range(len(self.objects)):
+        #     pos = self.sim.data.body_xpos[self.obstacle_ids[i]]
+        #     if pos[2] < 0.5: # if object is on the ground, penalize that
+        #         disturbance += fall_penalty
+        #         num_fallen_objects += 1
+        #     else:
+        #         initial_pos = self.initial_obstacle_positions[:,i]
+        #         disturbance += np.linalg.norm(pos - initial_pos)
+        # return disturbance, num_fallen_objects

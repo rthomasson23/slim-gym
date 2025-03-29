@@ -24,7 +24,7 @@ class ClutteredCabinet(Arena):
         table_friction=(1, 0.005, 0.0001),
         table_offset=(0, -0.4, 0.8),
         has_legs=False,
-        xml="arenas/cabinet_arenaNEW.xml",
+        xml="arenas/cluttered_cabinet_arena.xml",
     ):
         super().__init__(xml_path_completion(xml))
 
