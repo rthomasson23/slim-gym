@@ -101,7 +101,7 @@ class Keyboard(Device):
 
         dq_clipped = copy.copy(self.dq)
         dq_clipped[12] = min(0.7, dq_clipped[12])
-        dq_clipped[14] = max(-0.7, dq_clipped[14])
+        dq_clipped[14] = max(-0.8, dq_clipped[14])
         return dict(
             dpos=dpos,
             rotation=self.rotation,
@@ -214,7 +214,7 @@ class Keyboard(Device):
                 self.dq[10] += self.alpha * self.pos_sensitivity
                 self.dq[11] += self.alpha * self.pos_sensitivity
                 self.dq[12] += 2 * self.alpha * self.pos_sensitivity
-                self.dq[14] -= 3 *self.alpha * self.pos_sensitivity
+                self.dq[14] -= 3.5 *self.alpha * self.pos_sensitivity
                 self.dq[15] += 0.5*self.alpha * self.pos_sensitivity
 
 
@@ -230,7 +230,7 @@ class Keyboard(Device):
                 self.dq[10] -= self.alpha * self.pos_sensitivity
                 self.dq[11] -= self.alpha * self.pos_sensitivity
                 self.dq[12] -= 2 * self.alpha * self.pos_sensitivity
-                self.dq[14] += 3 *self.alpha * self.pos_sensitivity
+                self.dq[14] += 3.5 *self.alpha * self.pos_sensitivity
                 self.dq[15] -= 0.5 *self.alpha * self.pos_sensitivity
 
 
