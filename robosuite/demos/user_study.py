@@ -185,7 +185,7 @@ if __name__ == "__main__":
     '''
     subject_name = "davinci"
     hand = "right"
-    device = 'keyboard'
+    device = 'spacemouse'
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, default="single-arm-opposed", help="Specified environment configuration if necessary")
@@ -327,12 +327,12 @@ if __name__ == "__main__":
             # Set up a CSV file for the user to save the databbbb
             file_path = "../data/" + subject_name + ".csv"
 
-            if not os.path.exists(file_path):
-                # Column labels
-                column_labels = ["subject_name", "task", "robot", "trial", "success", "success_time", "disturbance", "num_fallen_objects", "reset"]
-                with open(file_path, 'a', newline='') as file:
-                    writer = csv.writer(file)
-                    writer.writerow(column_labels)
+            # if not os.path.exists(file_path):
+            #     # Column labels
+            #     column_labels = ["subject_name", "task", "robot", "trial", "success", "success_time", "disturbance", "num_fallen_objects", "reset"]
+            #     with open(file_path, 'a', newline='') as file:
+            #         writer = csv.writer(file)
+            #         writer.writerow(column_labels)
             # try:
             while True:
 
@@ -427,7 +427,7 @@ if __name__ == "__main__":
                         if trial_ended:
                             if success == 2: # True success
                                 env.viewer.viewer.add_marker(type=const.GEOM_ARROW, pos=env.goal_pos, mat=euler2mat([np.pi, 0, 0]), label='', size=[0.01, 0.01, 0.6], rgba=[0, 1, 0, 1])
-                            save_data(file_path, subject_name, task, robot, trial, success, success_time, reset=device.oculus_policy.number_of_resets)
+                            # save_data(file_path, subject_name, task, robot, trial, success, success_time, reset=device.oculus_policy.number_of_resets)
                             # print number of resets
                             
                             env.render()
@@ -466,7 +466,7 @@ if __name__ == "__main__":
                         if trial_ended:
                             if success: 
                                 env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=env.goal_object_pos, label='Success!', size=[1,1,1], rgba=[0, 0, 1, 1])
-                            save_data(file_path, subject_name, task, robot, trial, success, success_time, disturbance, num_fallen_objects, reset=device.oculus_policy.number_of_resets)
+                            # save_data(file_path, subject_name, task, robot, trial, success, success_time, disturbance, num_fallen_objects, reset=device.oculus_policy.number_of_resets)
                             env.render()                                
                             time.sleep(3)
                             device._reset_internal_state()
@@ -488,7 +488,7 @@ if __name__ == "__main__":
                         if trial_ended: 
                             if success:
                                 env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=env.place_object_pos, label='Success!', size=[1,1,1], rgba=[0, 0, 1, 1])
-                            save_data(file_path, subject_name, task, robot, trial, success, success_time, reset=device.oculus_policy.number_of_resets)
+                            # save_data(file_path, subject_name, task, robot, trial, success, success_time, reset=device.oculus_policy.number_of_resets)
                             
                             env.render()
                             time.sleep(3)

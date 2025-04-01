@@ -186,6 +186,9 @@ class SequentialPick(SingleArmEnv):
         # set up trial counter
         self.trial_counter = -1
 
+        # define the goal position for the objects
+        self.goal_zone_location = np.array([[0.035, 0.085],[-0.045, 0.045]])
+
         super().__init__(
             robots=robots,
             env_configuration=env_configuration,
@@ -296,7 +299,7 @@ class SequentialPick(SingleArmEnv):
 
         self.goal_object_1 = [CylinderObject(
             name=f"goal_object_1",
-            size=[0.035, 0.062],
+            size=[0.035, 0.092],
             rgba=[0.2, 1, 0.5, 1],
             material=greenwood,
             density=250,
@@ -304,7 +307,7 @@ class SequentialPick(SingleArmEnv):
 
         self.goal_object_2 = [CylinderObject(
             name=f"goal_object_2",
-            size=[0.035, 0.062],
+            size=[0.035, 0.092],
             rgba=[0.2, 1, 0.5, 1],
             material=greenwood,
             density=250,
@@ -423,8 +426,8 @@ class SequentialPick(SingleArmEnv):
         Returns:
             bool: True if object has beenr removed. 
         """
-        pass
-        # goal_object_pos = self.sim.data.body_xpos[self.goal_object_body_id]
+        goal_object_1_pos = self.sim.data.body_xpos[self.goal_object_1_body_id]
+        goal_object_2_pos = self.sim.data.body_xpos[self.goal_object_2_body_id]
         # self.goal_object_pos = goal_object_pos
         # self.goal_object_ori = self.sim.data.body_xquat[self.goal_object_body_id]
         # table_height = self.model.mujoco_arena.table_offset[2]
@@ -433,7 +436,7 @@ class SequentialPick(SingleArmEnv):
         # lifted_bool = goal_object_pos[2] > table_height + 0.08
         # removed_bool = goal_object_pos[0] < -0.02
 
-        # elapsed_time = time.time() - self.start_time
+        elapsed_time = time.time() - self.start_time
 
         # total_disturbance, num_fallen_objects = self._calculate_disturbance()
         

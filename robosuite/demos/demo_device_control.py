@@ -118,8 +118,8 @@ def is_corner(geom_id, env):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--environment", type=str, default="SequentialPick")
-    parser.add_argument("--robots", nargs="+", type=str, default="Panda", help="Which robot(s) to use in the env")
+    parser.add_argument("--environment", type=str, default="Train")
+    parser.add_argument("--robots", nargs="+", type=str, default="PandaLEAP", help="Which robot(s) to use in the env")
     parser.add_argument(
         "--config", type=str, default="single-arm-opposed", help="Specified environment configuration if necessary"
     )
@@ -197,7 +197,11 @@ if __name__ == "__main__":
     elif args.device == "spacemouse":
         from robosuite.devices import SpaceMouse
 
-        device = SpaceMouse(pos_sensitivity=args.pos_sensitivity, rot_sensitivity=args.rot_sensitivity)
+        # use_robotiq = False if (robot == "PandaSSLIM" or robot == "PandaSSLIMOG") else True
+        # drawer = False if ("DrawerPick" not in task) else True
+        device = SpaceMouse("Train", pos_sensitivity=args.pos_sensitivity, rot_sensitivity=args.rot_sensitivity, use_robotiq=False, drawer=False, use_leap=True)
+        env.viewer.add_keypress_callback("any", device.on_press)
+        env.viewer.add_keyrepeat_callback("any", device.on_press)
     else:
         raise Exception("Invalid device choice: choose either 'keyboard' or 'spacemouse'.")
 

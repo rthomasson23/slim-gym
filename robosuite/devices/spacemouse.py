@@ -22,6 +22,7 @@ For Linux support, you can find open-source Linux drivers and SDKs online.
 
 import time
 from collections import namedtuple
+import copy 
 
 
 import numpy as np
@@ -119,13 +120,15 @@ class SpaceMouse(Device):
         rot_sensitivity (float): Magnitude of scale input rotation commands scaling
     """
 
-    def __init__(self, task, vendor_id=9583, product_id=50735, pos_sensitivity=0.8, rot_sensitivity=1.0, use_robotiq=False, drawer=False):
+    def __init__(self, task, vendor_id=9583, product_id=50735, pos_sensitivity=0.8, rot_sensitivity=1.0, use_robotiq=False, drawer=False, use_leap=True):
         # print("Opening SpaceMouse device")
         rospy.init_node("spacemouse_listener", anonymous=True)
         rospy.Subscriber("spacenav/joy", Joy, self._get_spacemouse_commands)
 
         # turn this value to true if using Robotiq gripper, false if using SSLIM
         self.use_robotiq = use_robotiq
+
+        self.use_leap = use_leap
 
         self.symmetric = True
 
@@ -145,6 +148,15 @@ class SpaceMouse(Device):
 
         if self.use_robotiq:
             self.dq = [0]
+
+        elif self.use_leap:
+            self.dq = -np.ones(16)*0.64
+            self.dq[[1, 5, 9, 15]] = 0
+            self.dq[12] = -0.7
+            self.dq[13] = -0.7
+            self.dq[14] = 0.1
+            print("Using Leap Motion")
+        
         else:
             self.dq = np.zeros(7)
 
@@ -229,6 +241,12 @@ class SpaceMouse(Device):
         self.single_click_and_hold = False
         if self.use_robotiq:
             self.dq = [-1]
+        elif self.use_leap:
+            self.dq = -np.ones(16)*0.64
+            self.dq[[1, 5, 9, 15]] = 0
+            self.dq[12] = -0.7
+            self.dq[13] = -0.7
+            self.dq[14] = 0.1
         else:
             # self.sslim_state = 2
             self.dq = np.zeros(7)
@@ -255,7 +273,7 @@ class SpaceMouse(Device):
             else:
                 self.roll = self._axes[4]
                 self.pitch = self._axes[3]
-                self.yaw = self._axes[5] * -1
+                self.yaw = self._axes[5] #* -1
         else:
             self.roll = 0
             self.pitch = 0
@@ -336,8 +354,8 @@ class SpaceMouse(Device):
         Returns:
             dict: A dictionary containing dpos, orn, unmodified orn, grasp, and reset
         """
-        dpos = self.control[:3] * 0.008 * self.pos_sensitivity
-        roll, pitch, yaw = self.control[3:] * 0.008 * self.rot_sensitivity
+        dpos = self.control[:3] * 0.8 * self.pos_sensitivity
+        roll, pitch, yaw = self.control[3:] * 0.8 * self.rot_sensitivity
 
         # convert RPY to an absolute orientation
         drot1 = rotation_matrix(angle=-pitch, direction=[1.0, 0, 0], point=None)[:3, :3]
@@ -351,6 +369,37 @@ class SpaceMouse(Device):
                 self.dq[0] = min(1, self.dq[0] + 0.1)
             if self._buttons[1]:
                 self.dq[0] = max(-1, self.dq[0] - 0.1)
+        elif self.use_leap:
+            self.alpha = 0.04
+            if self._buttons[0]:
+                if self.dq[0] <= 1.5:
+                    self.dq[0] += self.alpha * self.pos_sensitivity
+                    self.dq[2] += self.alpha * self.pos_sensitivity
+                    self.dq[3] += self.alpha * self.pos_sensitivity
+                    self.dq[4] += self.alpha * self.pos_sensitivity
+                    self.dq[6] += self.alpha * self.pos_sensitivity
+                    self.dq[7] += self.alpha * self.pos_sensitivity
+                    self.dq[8] += self.alpha * self.pos_sensitivity
+                    self.dq[10] += self.alpha * self.pos_sensitivity
+                    self.dq[11] += self.alpha * self.pos_sensitivity
+                    self.dq[12] += 2* self.alpha * self.pos_sensitivity
+                    self.dq[14] -=  3*self.alpha * self.pos_sensitivity
+                    self.dq[15] += 0.5*self.alpha * self.pos_sensitivity
+
+            if self._buttons[1]:
+                if self.dq[0] >= -1:
+                    self.dq[0] -= self.alpha * self.pos_sensitivity
+                    self.dq[2] -= self.alpha * self.pos_sensitivity
+                    self.dq[3] -= self.alpha * self.pos_sensitivity
+                    self.dq[4] -= self.alpha * self.pos_sensitivity
+                    self.dq[6] -= self.alpha * self.pos_sensitivity
+                    self.dq[7] -= self.alpha * self.pos_sensitivity
+                    self.dq[8] -= self.alpha * self.pos_sensitivity
+                    self.dq[10] -= self.alpha * self.pos_sensitivity
+                    self.dq[11] -= self.alpha * self.pos_sensitivity
+                    self.dq[12] -= 2 * self.alpha * self.pos_sensitivity
+                    self.dq[14] +=  3*self.alpha * self.pos_sensitivity
+                    self.dq[15] -=  0.5*self.alpha * self.pos_sensitivity
         else:
             # # if  we have a new button 0 press
             # if self._buttons[0] == 1:
@@ -409,12 +458,20 @@ class SpaceMouse(Device):
                 self.dq = np.maximum(self.dq, np.zeros_like(self.dq))
             self.dq[4] = self.thumb_pos
 
+        dq_clipped = copy.copy(self.dq)
+        if self.use_leap:
+            dq_clipped[12] = min(0.7, dq_clipped[12])
+            dq_clipped[14] = max(-0.7, dq_clipped[14])
+
+        
+        print(dq_clipped)
+
         return dict(
             dpos=dpos,
             rotation=self.rotation,
             raw_drotation=np.array([roll, pitch, yaw]),
             grasp=self.control_gripper,
-            dq=self.dq,
+            dq=dq_clipped,
             reset=self._reset_state,
         )
 
