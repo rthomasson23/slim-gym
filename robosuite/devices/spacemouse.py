@@ -383,7 +383,7 @@ class SpaceMouse(Device):
                     self.dq[10] += self.alpha * self.pos_sensitivity
                     self.dq[11] += self.alpha * self.pos_sensitivity
                     self.dq[12] += 2* self.alpha * self.pos_sensitivity
-                    self.dq[14] -=  3*self.alpha * self.pos_sensitivity
+                    self.dq[14] -=  3.5*self.alpha * self.pos_sensitivity
                     self.dq[15] += 0.5*self.alpha * self.pos_sensitivity
 
             if self._buttons[1]:
@@ -398,7 +398,7 @@ class SpaceMouse(Device):
                     self.dq[10] -= self.alpha * self.pos_sensitivity
                     self.dq[11] -= self.alpha * self.pos_sensitivity
                     self.dq[12] -= 2 * self.alpha * self.pos_sensitivity
-                    self.dq[14] +=  3*self.alpha * self.pos_sensitivity
+                    self.dq[14] +=  3.5*self.alpha * self.pos_sensitivity
                     self.dq[15] -=  0.5*self.alpha * self.pos_sensitivity
         else:
             # # if  we have a new button 0 press
@@ -461,7 +461,7 @@ class SpaceMouse(Device):
         dq_clipped = copy.copy(self.dq)
         if self.use_leap:
             dq_clipped[12] = min(0.7, dq_clipped[12])
-            dq_clipped[14] = max(-0.7, dq_clipped[14])
+            dq_clipped[14] = max(-0.8, dq_clipped[14])
 
         
         print(dq_clipped)
