@@ -172,6 +172,9 @@ class SpaceMouse(Device):
         elif self.task == "Train":
             print("Train task")
             self.thumb_pos = 0
+        elif self.task == "SequentialPick":
+            print("Sequential Pick task")
+            self.thumb_pos = 1.2
 
         self.pinch = False
         self.link_thumb = True
@@ -383,7 +386,7 @@ class SpaceMouse(Device):
                     self.dq[10] += self.alpha * self.pos_sensitivity
                     self.dq[11] += self.alpha * self.pos_sensitivity
                     self.dq[12] += 2* self.alpha * self.pos_sensitivity
-                    self.dq[14] -=  3.5*self.alpha * self.pos_sensitivity
+                    self.dq[14] -=  4**self.alpha * self.pos_sensitivity
                     self.dq[15] += 0.5*self.alpha * self.pos_sensitivity
 
             if self._buttons[1]:
@@ -398,36 +401,9 @@ class SpaceMouse(Device):
                     self.dq[10] -= self.alpha * self.pos_sensitivity
                     self.dq[11] -= self.alpha * self.pos_sensitivity
                     self.dq[12] -= 2 * self.alpha * self.pos_sensitivity
-                    self.dq[14] +=  3.5*self.alpha * self.pos_sensitivity
+                    self.dq[14] +=  4**self.alpha * self.pos_sensitivity
                     self.dq[15] -=  0.5*self.alpha * self.pos_sensitivity
-        else:
-            # # if  we have a new button 0 press
-            # if self._buttons[0] == 1:
-            #     # check if enough time has passed
-            #     t0 = time.time()
-            #     if t0 - self.last_clicked[0] > 0.1:
-            #         self.sslim_state = max(0, self.sslim_state - 1)
-
-            #     self.last_clicked[0] = t0
-
-            # if self._buttons[1] == 1:
-            #     t1 = time.time()
-            #     if t1 - self.last_clicked[1] > 0.1:
-            #         self.sslim_state = min(4, self.sslim_state + 1)
-            #     self.last_clicked[1] = t1
-
-            # # command the joint angles corresponding to the desired state
-            # self.dq = self.sslim_grasps[self.sslim_state,:]
-
-            # if self.thumb_pos == 1:
-            #     self.dq[4] = 1
-            # else:
-            #     self.dq[4] = -1
-
-            # print(self.sslim_state)
-
-
-                
+        else:                
             if self._buttons[0]:
                 if self.dq[0] <= 1.5:
                     self.dq[0] += self.alpha * self.pos_sensitivity
@@ -462,9 +438,6 @@ class SpaceMouse(Device):
         if self.use_leap:
             dq_clipped[12] = min(0.7, dq_clipped[12])
             dq_clipped[14] = max(-0.8, dq_clipped[14])
-
-        
-        print(dq_clipped)
 
         return dict(
             dpos=dpos,

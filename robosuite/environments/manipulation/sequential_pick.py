@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 import numpy as np
 import time
-
+from scipy.spatial.transform import Rotation as R
 from robosuite.environments.manipulation.single_arm_env import SingleArmEnv
 from robosuite.models.arenas import ClutteredCabinet
 from robosuite.models.objects import BoxObject, CylinderObject
@@ -141,7 +141,7 @@ class SequentialPick(SingleArmEnv):
         controller_configs=None,
         gripper_types="default",
         initialization_noise="default",
-        table_full_size=(0.28, 0.66, 0.07),
+        table_full_size=(0.32, 0.66, 0.07),
         table_friction=(0.8, 0.5, 0.1),
         use_camera_obs=True,
         use_object_obs=True,
@@ -299,7 +299,7 @@ class SequentialPick(SingleArmEnv):
 
         self.goal_object_1 = [CylinderObject(
             name=f"goal_object_1",
-            size=[0.035, 0.092],
+            size=[0.035, 0.082],
             rgba=[0.2, 1, 0.5, 1],
             material=greenwood,
             density=250,
@@ -307,7 +307,7 @@ class SequentialPick(SingleArmEnv):
 
         self.goal_object_2 = [CylinderObject(
             name=f"goal_object_2",
-            size=[0.035, 0.092],
+            size=[0.035, 0.082],
             rgba=[0.2, 1, 0.5, 1],
             material=greenwood,
             density=250,
@@ -389,7 +389,7 @@ class SequentialPick(SingleArmEnv):
             np.random.seed(self.trial_counter + 2)
             self.trial_counter += 1
 
-            if self.trial_counter > 5:
+            if self.trial_counter > 2:
                 exit()
 
             # Sample from the placement initializer for all objects
@@ -426,28 +426,42 @@ class SequentialPick(SingleArmEnv):
         Returns:
             bool: True if object has beenr removed. 
         """
+        # get goal object positions
         goal_object_1_pos = self.sim.data.body_xpos[self.goal_object_1_body_id]
         goal_object_2_pos = self.sim.data.body_xpos[self.goal_object_2_body_id]
-        # self.goal_object_pos = goal_object_pos
-        # self.goal_object_ori = self.sim.data.body_xquat[self.goal_object_body_id]
-        # table_height = self.model.mujoco_arena.table_offset[2]
 
-        # # object is higher than the table top above a margin
-        # lifted_bool = goal_object_pos[2] > table_height + 0.08
-        # removed_bool = goal_object_pos[0] < -0.02
+        # get goal object orientations
+        goal_object_1_quat = self.sim.data.body_xquat[self.goal_object_1_body_id]
+        goal_object_2_quat = self.sim.data.body_xquat[self.goal_object_2_body_id]
+
+        # convert quaternions to euler angles
+        rot_1 = R.from_quat(goal_object_1_quat)
+        goal_object_1_euler = R.as_euler(rot_1, 'xyz')
+        goal_object_1_y_axis = goal_object_1_euler[1]
+        upright_bool_1 = np.abs(goal_object_1_y_axis) < 1e-4
+
+        rot_2 = R.from_quat(goal_object_2_quat)
+        goal_object_2_euler = R.as_euler(rot_2, 'xyz')
+        goal_object_2_y_axis = goal_object_2_euler[1]
+        upright_bool_2 = np.abs(goal_object_2_y_axis) < 1e-4
+
+        # check if object is in the goal zone
+        goal_zone_bool_1 = (0.4 < goal_object_1_pos[0] < 0.46) and (-0.11 < goal_object_1_pos[1] < 0.11)
+        goal_zone_bool_2 = (0.4 < goal_object_2_pos[0] < 0.46) and (-0.11 < goal_object_2_pos[1] < 0.11)
+
+        # check if object is dropped
+        dropped_bool_1 = goal_object_1_pos[2] < 0.5
+        dropped_bool_2 = goal_object_2_pos[2] < 0.5
 
         elapsed_time = time.time() - self.start_time
 
-        # total_disturbance, num_fallen_objects = self._calculate_disturbance()
-        
-        # if lifted_bool and removed_bool:
-        #     print("Success! Time: {}".format(elapsed_time))
-        #     print("Disturbance: {}".format(total_disturbance))
-        #     return True, True, elapsed_time, total_disturbance, num_fallen_objects, self.trial_counter-1
-        # elif (elapsed_time > 60) or (goal_object_pos[2] < 0.5):
-        #     return True, False, elapsed_time, total_disturbance, num_fallen_objects, self.trial_counter-1
-        # else: 
-        #     return False, False, None, None, None, self.trial_counter-1
+        if goal_zone_bool_1 and goal_zone_bool_2 and upright_bool_1 and upright_bool_2:
+            print("Success! Time: {}".format(elapsed_time))
+            return True, True, elapsed_time, self.trial_counter-1
+        elif (elapsed_time > 60) or dropped_bool_1 or dropped_bool_2:
+            print("Failure! Time: {}".format(elapsed_time))
+            return True, False, elapsed_time, self.trial_counter-1
+        return False, 0, elapsed_time, self.trial_counter - 1
     
     def _calculate_disturbance(self):
         pass

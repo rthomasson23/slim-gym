@@ -191,7 +191,6 @@ def input2action(device, robot, active_arm="right", env_configuration=None):
         state["reset"],
     )
     
-
     # If we're resetting, immediately return None
     if reset:
         return None, None
@@ -254,7 +253,6 @@ def input2action(device, robot, active_arm="right", env_configuration=None):
         action = np.concatenate([dpos, [grasp] * gripper_dof])
     else:
         action = np.concatenate([dpos, drotation, dq])
-
     # Return the action and grasp
     return action, grasp
 

@@ -424,8 +424,9 @@ class Bookshelf(SingleArmEnv):
             # set random seed
             np.random.seed(self.trial_counter + 2)
             self.trial_counter += 1
+            print("Trial: {}".format(self.trial_counter))
 
-            if self.trial_counter > 5:
+            if self.trial_counter > 2:
                 exit()
 
             object_counter = 0

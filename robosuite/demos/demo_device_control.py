@@ -119,7 +119,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--environment", type=str, default="SequentialPick")
-    parser.add_argument("--robots", nargs="+", type=str, default="PandaLEAP", help="Which robot(s) to use in the env")
+    parser.add_argument("--robots", nargs="+", type=str, default="PandaSSLIM", help="Which robot(s) to use in the env")
     parser.add_argument(
         "--config", type=str, default="single-arm-opposed", help="Specified environment configuration if necessary"
     )
@@ -164,7 +164,7 @@ if __name__ == "__main__":
         **config,
         has_renderer=True,
         has_offscreen_renderer=False,
-        render_camera="birdview",
+        render_camera="cabinetview",
         ignore_done=True,
         use_camera_obs=False,
         reward_shaping=True,
@@ -199,7 +199,7 @@ if __name__ == "__main__":
 
         # use_robotiq = False if (robot == "PandaSSLIM" or robot == "PandaSSLIMOG") else True
         # drawer = False if ("DrawerPick" not in task) else True
-        device = SpaceMouse("Train", pos_sensitivity=args.pos_sensitivity, rot_sensitivity=args.rot_sensitivity, use_robotiq=False, drawer=False, use_leap=True)
+        device = SpaceMouse("Train", pos_sensitivity=args.pos_sensitivity, rot_sensitivity=args.rot_sensitivity, use_robotiq=False, drawer=False, use_leap=False)
         env.viewer.add_keypress_callback("any", device.on_press)
         env.viewer.add_keyrepeat_callback("any", device.on_press)
     else:

@@ -420,8 +420,8 @@ class ConstrainedReorient(SingleArmEnv):
         """
         # Run superclass method first
         # TODO Rachel change this to vis_settings=vis_settings if you want to visualize sites again
-        # super().visualize(vis_settings=vis_settings)
-        super().visualize(vis_settings={vis: True for vis in self._visualizations})
+        super().visualize(vis_settings=vis_settings)
+        # super().visualize(vis_settings={vis: True for vis in self._visualizations})
         # super().visualize(vis_settings={vis: False for vis in self._visualizations})
 
     def _check_success(self):
@@ -442,7 +442,7 @@ class ConstrainedReorient(SingleArmEnv):
         rot = R.from_quat(place_object_quat)
         place_object_euler = R.as_euler(rot, 'xyz')
         y_axis = place_object_euler[1]
-        upright_bool = np.linalg.norm(np.abs(y_axis) - np.pi / 2) < 1e-4
+        upright_bool = np.linalg.norm(np.abs(y_axis)) < 1e-4
 
         xy_margin = 0.03
         z_margin = 0.001
