@@ -185,7 +185,8 @@ if __name__ == "__main__":
     '''
     subject_name = "davinci"
     hand = "right"
-    device = 'keyboard'
+    # device = 'keyboard'
+    device = 'oculus'
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, default="single-arm-opposed", help="Specified environment configuration if necessary")
