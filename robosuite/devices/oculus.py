@@ -199,6 +199,7 @@ class Oculus(Device):
 
         # turn this value to true if using Robotiq gripper, false if using SSLIM
         self.use_robotiq = use_robotiq
+        self.use_leap = use_leap
         self.symmetric = True
         self.use_ori = True
         self.task = task
@@ -295,6 +296,14 @@ class Oculus(Device):
         if self.use_robotiq:
             self.dq = [-1]
             self.dq_actual = [-1]
+        elif self.use_leap:
+            self.dq = -np.ones(16)*0.64
+            self.dq[[1, 5, 9, 15]] = 0
+            self.dq[12] = -0.7
+            self.dq[13] = -0.7
+            self.dq[14] = 0.1
+            # print("Using Leap Motion")
+            self.dq_actual = self.dq
         else:
             # self.sslim_state = 2
             self.dq = np.zeros(7)
