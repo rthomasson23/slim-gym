@@ -1,6 +1,6 @@
 from .device import Device
 from .keyboard import Keyboard
-# from .oculus import Oculus
+from .oculus import Oculus
 
 try:
     from .spacemouse import SpaceMouse

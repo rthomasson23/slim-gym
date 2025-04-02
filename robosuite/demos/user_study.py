@@ -185,7 +185,7 @@ if __name__ == "__main__":
     '''
     subject_name = "davinci"
     hand = "right"
-    device = 'spacemouse'
+    device = 'oculus'
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, default="single-arm-opposed", help="Specified environment configuration if necessary")
@@ -236,7 +236,7 @@ if __name__ == "__main__":
        
         # Randomly order the robot options
         # robots = ["Panda", "PandaWrist", "PandaSSLIM", ]
-        robots = ["PandaLEAP", "PandaSSLIM"]#,"PandaLEAP", "PandaLEAP", "PandaLEAP", ]
+        robots = ["PandaLEAP"]#,"PandaLEAP", "PandaLEAP", "PandaLEAP", ]
        
         if "Train" not in task:
             np.random.shuffle(robots)
