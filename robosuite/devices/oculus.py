@@ -457,7 +457,7 @@ class Oculus(Device):
                     self.dq[10] += self.alpha * self.pos_sensitivity
                     self.dq[11] += self.alpha * self.pos_sensitivity
                     self.dq[12] += 2* self.alpha * self.pos_sensitivity
-                    self.dq[14] -=  4**self.alpha * self.pos_sensitivity
+                    self.dq[14] -=  4*self.alpha * self.pos_sensitivity
                     self.dq[15] += 0.5*self.alpha * self.pos_sensitivity
 
             if self._buttons[1]:
@@ -472,7 +472,7 @@ class Oculus(Device):
                     self.dq[10] -= self.alpha * self.pos_sensitivity
                     self.dq[11] -= self.alpha * self.pos_sensitivity
                     self.dq[12] -= 2 * self.alpha * self.pos_sensitivity
-                    self.dq[14] +=  4**self.alpha * self.pos_sensitivity
+                    self.dq[14] +=  4*self.alpha * self.pos_sensitivity
                     self.dq[15] -=  0.5*self.alpha * self.pos_sensitivity
 
         else:                
