@@ -141,8 +141,8 @@ class SequentialPick(SingleArmEnv):
         controller_configs=None,
         gripper_types="default",
         initialization_noise="default",
-        table_full_size=(0.32, 0.66, 0.07),
-        table_friction=(0.8, 0.5, 0.1),
+        table_full_size=(0.38, 0.66, 0.07),
+        table_friction=(0.2, 0.5, 0.1),
         use_camera_obs=True,
         use_object_obs=True,
         reward_scale=1.0,
@@ -299,7 +299,7 @@ class SequentialPick(SingleArmEnv):
 
         self.goal_object_1 = [CylinderObject(
             name=f"goal_object_1",
-            size=[0.035, 0.082],
+            size=[0.038, 0.112],
             rgba=[0.2, 1, 0.5, 1],
             material=greenwood,
             density=250,
@@ -307,7 +307,7 @@ class SequentialPick(SingleArmEnv):
 
         self.goal_object_2 = [CylinderObject(
             name=f"goal_object_2",
-            size=[0.035, 0.082],
+            size=[0.038, 0.112],
             rgba=[0.2, 1, 0.5, 1],
             material=greenwood,
             density=250,

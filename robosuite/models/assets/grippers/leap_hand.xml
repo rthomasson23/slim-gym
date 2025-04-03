@@ -167,7 +167,7 @@
     <body name="palm" pos="0.000000 0.027000 -0.108000" quat="0.7071068 0 0.7071068 0">
       
       <site name="ft_frame" pos="0.000000 -0.054000 0.000000" size="0.01 0.01 0.01" rgba="1 0 0 0" type="sphere" group="1" />
-      <site name="grip_site" pos="0.000000 -0.072000 0.000000" size="0.01 0.01 0.01" rgba="1 0 0 0" type="sphere" group="1" />
+      <site name="grip_site" pos="0.050000 -0.012000 0.00000" size="0.01 0.01 0.01" rgba="1 0 0 0" type="sphere" group="1" />
       <site name="grip_site_cylinder" pos="-0.04000 -0.03200 -0.092000" quat="1 0 0 0" size="0.005 .1" rgba=".627 .125 .941 .2" type="cylinder" group="1" />
       <inertial pos="-0.049542 -0.42914 -0.010227" quat="0.565586 0.427629 -0.574956 0.408254" mass="0.237" diaginertia="0.000407345 0.000304759 0.000180736" />
       <geom name="palm_visual" pos="-0.018000 0.023175 -0.031230" quat="1 0 0 0" class="visual" mesh="palm" />
