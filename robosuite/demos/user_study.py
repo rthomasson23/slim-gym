@@ -236,7 +236,7 @@ if __name__ == "__main__":
        
         # Randomly order the robot options
         # robots = ["Panda", "PandaWrist", "PandaSSLIM", ]
-        robots = ["PandaLEAP"]#,"PandaLEAP", "PandaLEAP", "PandaLEAP", ]
+        robots = ["PandaSSLIM"]#,"PandaLEAP", "PandaLEAP", "PandaLEAP", ]
        
         if "Train" not in task:
             np.random.shuffle(robots)
@@ -301,7 +301,7 @@ if __name__ == "__main__":
 
             # Setup printing options for numbers
             np.set_printoptions(formatter={"float": lambda x: "{0:0.3f}".format(x)})
-
+            device_name = args.device
             # initialize device
             if args.device == "keyboard":
                 from robosuite.devices import Keyboard
@@ -426,7 +426,7 @@ if __name__ == "__main__":
                             if trial_ended:
                                 if success == 2: # True success
                                     env.viewer.viewer.add_marker(type=const.GEOM_ARROW, pos=env.goal_pos, mat=euler2mat([np.pi, 0, 0]), label='', size=[0.01, 0.01, 0.6], rgba=[0, 1, 0, 1])
-                                if device == "oculus":
+                                if device_name == "oculus":
                                     num_resets = device.oculus_policy.number_of_resets
                                 else:
                                     num_resets = 0
@@ -434,7 +434,7 @@ if __name__ == "__main__":
                                 env.render()
                                 time.sleep(3)
                                 device._reset_internal_state()
-                                if device == "oculus":
+                                if device_name == "oculus":
                                     device.oculus_policy.reinitialize_policy()
                                     device.oculus_policy.number_of_resets = 0
                             else:
@@ -449,7 +449,7 @@ if __name__ == "__main__":
                             if new: 
                                 time.sleep(1) 
                                 device._reset_internal_state()
-                                if device == "oculus":
+                                if device_name == "oculus":
                                     device.oculus_policy.reinitialize_policy()
                                 env.render()
                                 if finish:
@@ -472,7 +472,7 @@ if __name__ == "__main__":
                                 env.render()
                                 time.sleep(3)
                                 device._reset_internal_state()
-                                if device == "oculus":
+                                if device_name == "oculus":
                                     device.oculus_policy.reinitialize_policy()
                                     device.oculus_policy.number_of_resets = 0
 
@@ -481,7 +481,7 @@ if __name__ == "__main__":
                             if trial_ended:
                                 if success: 
                                     env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=env.goal_object_pos, label='Success!', size=[1,1,1], rgba=[0, 0, 1, 1])
-                                if device == "oculus":
+                                if device_name == "oculus":
                                     num_resets = device.oculus_policy.number_of_resets
                                 else:
                                     num_resets = 0
@@ -491,7 +491,7 @@ if __name__ == "__main__":
                                 device._reset_internal_state()
 
                                 print("reset internal state")
-                                if device == "oculus":
+                                if device_name == "oculus":
                                     device.oculus_policy.reinitialize_policy()
                                     device.oculus_policy.number_of_resets = 0
 
@@ -501,7 +501,7 @@ if __name__ == "__main__":
                                 time.sleep(1)
                                 env.render()
                                 device._reset_internal_state()
-                                if device == "oculus":
+                                if device_name == "oculus":
                                     device.oculus_policy.reinitialize_policy()
                             if finish:
                                 raise Exception("Finish")
@@ -511,7 +511,7 @@ if __name__ == "__main__":
                             if trial_ended: 
                                 if success:
                                     env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=env.place_object_pos, label='Success!', size=[1,1,1], rgba=[0, 0, 1, 1])
-                                if device == "oculus":
+                                if device_name == "oculus":
                                     num_resets = device.oculus_policy.number_of_resets
                                 else:
                                     num_resets = 0
@@ -520,7 +520,7 @@ if __name__ == "__main__":
                                 env.render()
                                 time.sleep(3)
                                 device._reset_internal_state()
-                                if device == "oculus":
+                                if device_name == "oculus":
                                     device.oculus_policy.reinitialize_policy()
                                     device.oculus_policy.number_of_resets = 0
 
@@ -531,7 +531,7 @@ if __name__ == "__main__":
                                 time.sleep(1)
                                 env.render()
                                 device._reset_internal_state()
-                                if device == "oculus":
+                                if device_name == "oculus":
                                     device.oculus_policy.reinitialize_policy()
                                 if finish:
                                     raise Exception("Finish")
