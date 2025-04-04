@@ -360,14 +360,24 @@ class Oculus(Device):
         #     self.roll, self.pitch, self.yaw = rpy
 
         if self.task == "SequentialPick" or self.task == "SequentialPickTrain":
-            self._control = [
-                self.x,
-                self.y,
-                1.652,
-                self.roll,
-                0.0,
-                self.yaw,
-        ]
+            if self.use_leap:
+                self._control = [
+                    self.x,
+                    self.y,
+                    1.652,
+                    self.roll,
+                    0.0,
+                    self.yaw,
+            ]
+            else:
+                self._control = [
+                    self.x,
+                    self.y,
+                    1.652,
+                    0.0,
+                    self.pitch, 
+                    self.yaw,
+            ]
         else:
 
             self._control = [
