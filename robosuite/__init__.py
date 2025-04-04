@@ -20,6 +20,7 @@ from robosuite.environments.manipulation.drawer_pick_train import DrawerPickTrai
 from robosuite.environments.manipulation.constrained_reorient_train import ConstrainedReorientTrain
 from robosuite.environments.manipulation.bookshelf_train import BookshelfTrain
 from robosuite.environments.manipulation.sequential_pick import SequentialPick
+from robosuite.environments.manipulation.sequential_pick_train import SequentialPickTrain
 
 from robosuite.environments import ALL_ENVIRONMENTS
 from robosuite.controllers import ALL_CONTROLLERS, load_controller_config
