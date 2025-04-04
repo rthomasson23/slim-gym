@@ -183,7 +183,7 @@ if __name__ == "__main__":
     ''' 
     ADD THE USER NAME HERE!!!!
     '''
-    subject_name = "rachel_test"
+    subject_name = "rachel_test_3"
     hand = "right"
     device = 'oculus'
 

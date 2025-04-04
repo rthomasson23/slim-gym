@@ -214,7 +214,21 @@ class Oculus(Device):
         self.x, self.y, self.z = 0, 0, 0
         self.roll, self.pitch, self.yaw = 0, 0, 0
 
-
+        if self.task == "Bookshelf" or self.task == "BookshelfTrain":
+            print("Bookshelf task")
+            self.thumb_pos = -0.6
+        elif self.task == "DrawerPick" or self.task == "DrawerPickTrain":
+            print("Drawer task")
+            self.thumb_pos = 1
+        elif self.task == "ConstrainedReorient" or self.task == "ConstrainedReorientTrain":
+            print("Constrained Reorient task")
+            self.thumb_pos = 0.6
+        elif self.task == "SequentialPick" or self.task == "SequentialPickTrain":
+            print("Sequential Pick task")
+            self.thumb_pos = 1.0
+        else:
+            print("Train task")
+            self.thumb_pos = 1.0
 
         if self.use_robotiq:
             self.dq = [0]
@@ -229,22 +243,7 @@ class Oculus(Device):
         
         else:
             self.dq = np.zeros(7)
-
-        if self.task == "Bookshelf" or self.task == "BookshelfTrain":
-            print("Bookshelf task")
-            self.thumb_pos = -0.6
-        elif self.task == "DrawerPick" or self.task == "DrawerPickTrain":
-            print("Drawer task")
-            self.thumb_pos = 1
-        elif self.task == "ConstrainedReorient" or self.task == "ConstrainedReorientTrain":
-            print("Constrained Reorient task")
-            self.thumb_pos = 0.6
-        elif self.task == "SequentialPick" or self.task == "SequentialPickTrain":
-            print("Sequential Pick task")
-            self.thumb_pos = 1.2
-        else:
-            print("Train task")
-            self.thumb_pos = 0
+            self.dq[4] = self.thumb_pos
             
         
         self.pinch = False
@@ -307,6 +306,7 @@ class Oculus(Device):
         else:
             # self.sslim_state = 2
             self.dq = np.zeros(7)
+            self.dq[4] = self.thumb_pos
             self.dq_actual = np.zeros(7)
 
     
@@ -502,7 +502,7 @@ class Oculus(Device):
 
         else:                
             if self._buttons[0]:
-                if self.dq[0] <= 0.8:
+                if self.dq[0] <= 0.6:
                     self.dq[0] += self.alpha * self.pos_sensitivity
                     self.dq[2] += self.alpha * self.pos_sensitivity
                     self.dq[5] += self.alpha * self.pos_sensitivity
@@ -517,7 +517,7 @@ class Oculus(Device):
                 self.dq_actual[6] = min(self.dq[6], 1.35 - self.dq[5])
 
             if self._buttons[1]:
-                if self.dq[0] >= -.8:
+                if self.dq[0] >= -.6:
                     self.dq[0] -= self.alpha * self.pos_sensitivity
                     self.dq[2] -= self.alpha * self.pos_sensitivity
 

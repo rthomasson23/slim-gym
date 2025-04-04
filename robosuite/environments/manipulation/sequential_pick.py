@@ -438,12 +438,12 @@ class SequentialPick(SingleArmEnv):
         rot_1 = R.from_quat(goal_object_1_quat)
         goal_object_1_euler = R.as_euler(rot_1, 'xyz')
         goal_object_1_y_axis = goal_object_1_euler[1]
-        upright_bool_1 = np.abs(goal_object_1_y_axis) < 1e-3
+        upright_bool_1 = np.abs(goal_object_1_y_axis) < 2e-4
 
         rot_2 = R.from_quat(goal_object_2_quat)
         goal_object_2_euler = R.as_euler(rot_2, 'xyz')
         goal_object_2_y_axis = goal_object_2_euler[1]
-        upright_bool_2 = np.abs(goal_object_2_y_axis) < 1e-3
+        upright_bool_2 = np.abs(goal_object_2_y_axis) < 2e-4
 
         # save object positions
         self.goal_object_1_pos = goal_object_1_pos
