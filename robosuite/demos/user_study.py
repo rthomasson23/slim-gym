@@ -465,6 +465,14 @@ if __name__ == "__main__":
 
                         elif task == "SequentialPick":
                             trial_ended, success, object_1_placed, object_2_placed, success_time, trial = env._check_success()
+                                                        
+                            if success:
+                                env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=[0.41, 0.0, 1.583], label='Success!', size=[2,2,2], rgba=[0, 0, 1, 1])
+                            elif object_1_placed:
+                                env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=[0.41, 0.01, 1.583], label='Placed', size=[1,1,1], rgba=[0, 0, 1, 1])
+                            elif object_2_placed:
+                                env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=[0.41, -0.01, 1.583], label='Placed', size=[1,1,1], rgba=[0, 0, 1, 1])
+                            
                             if trial_ended: 
                                 env.render()
                                 time.sleep(3)
@@ -473,17 +481,17 @@ if __name__ == "__main__":
                                     device.oculus_policy.reinitialize_policy()
                                     device.oculus_policy.number_of_resets = 0
                                 save_data(file_path, subject_name, task, robot, trial, success, success_time)
-                            
+
+                        elif task == "SequentialPickTrain":
+                            new, success, object_1_placed, object_2_placed, finish = env._check_success()
+
                             if success:
                                 env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=[0.41, 0.0, 1.583], label='Success!', size=[2,2,2], rgba=[0, 0, 1, 1])
                             elif object_1_placed:
                                 env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=[0.41, 0.01, 1.583], label='Placed', size=[1,1,1], rgba=[0, 0, 1, 1])
                             elif object_2_placed:
                                 env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=[0.41, -0.01, 1.583], label='Placed', size=[1,1,1], rgba=[0, 0, 1, 1])
-                            
 
-                        elif task == "SequentialPickTrain":
-                            new, success, object_1_placed, object_2_placed, finish = env._check_success()
 
                             if new: 
                                 time.sleep(1) 
@@ -493,13 +501,6 @@ if __name__ == "__main__":
                                 env.render()
                                 if finish:
                                     raise Exception("Finish")
-
-                            if success:
-                                env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=[0.41, 0.0, 1.583], label='Success!', size=[2,2,2], rgba=[0, 0, 1, 1])
-                            elif object_1_placed:
-                                env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=[0.41, 0.01, 1.583], label='Placed', size=[1,1,1], rgba=[0, 0, 1, 1])
-                            elif object_2_placed:
-                                env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=[0.41, -0.01, 1.583], label='Placed', size=[1,1,1], rgba=[0, 0, 1, 1])
 
 
                         elif task == "Bookshelf":
