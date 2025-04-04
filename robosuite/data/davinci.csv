@@ -1,1 +1,12 @@
 subject_name,task,robot,trial,success,success_time,disturbance,num_fallen_objects,reset
+davinci,SequentialPick,PandaLEAP,0,False,60.01244044303894,,,
+davinci,SequentialPick,PandaLEAP,0,False,60.001951456069946,,,
+davinci,SequentialPick,PandaLEAP,1,False,60.0024950504303,,,
+davinci,SequentialPick,PandaSSLIM,0,False,60.011592388153076,,,
+davinci,SequentialPick,PandaSSLIM,1,False,60.000595808029175,,,
+davinci,SequentialPick,PandaSSLIM,0,False,60.01010847091675,,,
+davinci,SequentialPick,PandaSSLIM,1,True,58.32455658912659,,,
+davinci,SequentialPick,PandaSSLIM,0,True,53.21751618385315,,,
+davinci,SequentialPick,PandaSSLIM,1,False,60.013410329818726,,,
+davinci,SequentialPick,PandaLEAP,0,False,60.00215721130371,,,
+davinci,SequentialPick,PandaLEAP,1,False,60.01649570465088,,,

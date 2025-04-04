@@ -1,0 +1,5 @@
+subject_name,task,robot,trial,success,success_time,disturbance,num_fallen_objects,reset
+hao,SequentialPick,PandaLEAP,0,False,60.01032543182373,,,
+hao,SequentialPick,PandaLEAP,1,False,38.75114703178406,,,
+hao,SequentialPick,PandaLEAP,0,False,60.01209616661072,,,
+hao,SequentialPick,PandaLEAP,1,False,60.01566028594971,,,
