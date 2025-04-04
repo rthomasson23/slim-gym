@@ -389,7 +389,7 @@ class SequentialPick(SingleArmEnv):
             np.random.seed(self.trial_counter + 2)
             self.trial_counter += 1
 
-            if self.trial_counter > 2:
+            if self.trial_counter > 5:
                 exit()
 
             # Sample from the placement initializer for all objects
@@ -438,12 +438,16 @@ class SequentialPick(SingleArmEnv):
         rot_1 = R.from_quat(goal_object_1_quat)
         goal_object_1_euler = R.as_euler(rot_1, 'xyz')
         goal_object_1_y_axis = goal_object_1_euler[1]
-        upright_bool_1 = np.abs(goal_object_1_y_axis) < 1e-4
+        upright_bool_1 = np.abs(goal_object_1_y_axis) < 1e-3
 
         rot_2 = R.from_quat(goal_object_2_quat)
         goal_object_2_euler = R.as_euler(rot_2, 'xyz')
         goal_object_2_y_axis = goal_object_2_euler[1]
-        upright_bool_2 = np.abs(goal_object_2_y_axis) < 1e-4
+        upright_bool_2 = np.abs(goal_object_2_y_axis) < 1e-3
+
+        # save object positions
+        self.goal_object_1_pos = goal_object_1_pos
+        self.goal_object_2_pos = goal_object_2_pos
 
         # check if object is in the goal zone
         goal_zone_bool_1 = (0.4 < goal_object_1_pos[0] < 0.46) and (-0.11 < goal_object_1_pos[1] < 0.11)
@@ -453,15 +457,23 @@ class SequentialPick(SingleArmEnv):
         dropped_bool_1 = goal_object_1_pos[2] < 0.5
         dropped_bool_2 = goal_object_2_pos[2] < 0.5
 
+        # calculate success metrics
+        object_1_placed = goal_zone_bool_1 and upright_bool_1
+        object_2_placed = goal_zone_bool_2 and upright_bool_2
+
         elapsed_time = time.time() - self.start_time
 
-        if goal_zone_bool_1 and goal_zone_bool_2 and upright_bool_1 and upright_bool_2:
+        if object_1_placed and object_2_placed:
             print("Success! Time: {}".format(elapsed_time))
-            return True, True, elapsed_time, self.trial_counter-1
+            return True, True, True, True, elapsed_time, self.trial_counter-1
+        elif object_1_placed and not object_2_placed:
+            return False, False, True, False, elapsed_time, self.trial_counter-1
+        elif object_2_placed and not object_1_placed:
+            return False, False, False, True, elapsed_time, self.trial_counter-1
         elif (elapsed_time > 60) or dropped_bool_1 or dropped_bool_2:
             print("Failure! Time: {}".format(elapsed_time))
-            return True, False, elapsed_time, self.trial_counter-1
-        return False, 0, elapsed_time, self.trial_counter - 1
+            return True, False, False, False, elapsed_time, self.trial_counter-1
+        return False, 0, False, False, elapsed_time, self.trial_counter - 1
     
     def _calculate_disturbance(self):
         pass

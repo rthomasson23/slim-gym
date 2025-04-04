@@ -359,7 +359,7 @@ class Oculus(Device):
         #     rpy = mat2euler(action_ori)
         #     self.roll, self.pitch, self.yaw = rpy
 
-        if self.task == "SequentialPick" or self.task == "SequantialPickTrain":
+        if self.task == "SequentialPick" or self.task == "SequentialPickTrain":
             self._control = [
                 self.x,
                 self.y,
