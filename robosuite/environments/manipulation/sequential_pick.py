@@ -466,13 +466,13 @@ class SequentialPick(SingleArmEnv):
         if object_1_placed and object_2_placed:
             print("Success! Time: {}".format(elapsed_time))
             return True, True, True, True, elapsed_time, self.trial_counter-1
+        elif (elapsed_time > 60) or dropped_bool_1 or dropped_bool_2:
+            print("Failure! Time: {}".format(elapsed_time))
+            return True, False, False, False, elapsed_time, self.trial_counter-1
         elif object_1_placed and not object_2_placed:
             return False, False, True, False, elapsed_time, self.trial_counter-1
         elif object_2_placed and not object_1_placed:
             return False, False, False, True, elapsed_time, self.trial_counter-1
-        elif (elapsed_time > 60) or dropped_bool_1 or dropped_bool_2:
-            print("Failure! Time: {}".format(elapsed_time))
-            return True, False, False, False, elapsed_time, self.trial_counter-1
         return False, 0, False, False, elapsed_time, self.trial_counter - 1
     
     def _calculate_disturbance(self):
