@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 
-def scale_mujoco_model(input_path, output_path, scale=0.75):
+def scale_mujoco_model(input_path, output_path, scale=1.0):
     """
     Scales a MuJoCo XML model:
     - Adds mesh scale
@@ -38,5 +38,5 @@ def scale_mujoco_model(input_path, output_path, scale=0.75):
 
 if __name__ == "__main__":
     
-    output_path = scale_mujoco_model("/home/rthom/Documents/Research/TRI/slim_opensource/robosuite/models/assets/grippers/leap_hand.xml", "/home/rthom/Documents/Research/TRI/slim_opensource/robosuite/models/assets/grippers/leap_hand_09.xml", 0.9)
+    output_path = scale_mujoco_model("/home/rthom/Documents/Research/TRI/slim_opensource/robosuite/models/assets/grippers/leap_hand.xml", "/home/rthom/Documents/Research/TRI/slim_opensource/robosuite/models/assets/grippers/leap_hand_095.xml", 0.95)
     print(f"Scaled model saved to: {output_path}")

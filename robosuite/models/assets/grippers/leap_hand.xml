@@ -1,23 +1,20 @@
 <?xml version='1.0' encoding='utf-8'?>
-<!-- SCALED DOWN BY 0.9 -->
 <mujoco model="leap_rh">
-  
-  
 
   
   <asset>
     <material name="black" rgba="0.2 0.2 0.2 1" />
 
-    <mesh name="palm" file="meshes/leap_hand/palm_right.stl" scale="0.9 0.9 0.9" />
-    <mesh name="base" file="meshes/leap_hand/base.stl" scale="0.9 0.9 0.9" />
-    <mesh name="proximal" file="meshes/leap_hand/proximal.stl" scale="0.9 0.9 0.9" />
-    <mesh name="medial" file="meshes/leap_hand/medial.stl" scale="0.9 0.9 0.9" />
-    <mesh name="distal" file="meshes/leap_hand/distal.stl" scale="0.9 0.9 0.9" />
-    <mesh name="tip" file="meshes/leap_hand/tip.stl" scale="0.9 0.9 0.9" />
-    <mesh name="thumb_base" file="meshes/leap_hand/thumb_base.stl" scale="0.9 0.9 0.9" />
-    <mesh name="thumb_proximal" file="meshes/leap_hand/thumb_proximal.stl" scale="0.9 0.9 0.9" />
-    <mesh name="thumb_distal" file="meshes/leap_hand/thumb_distal.stl" scale="0.9 0.9 0.9" />
-    <mesh name="thumb_tip" file="meshes/leap_hand/thumb_tip.stl" scale="0.9 0.9 0.9" />
+    <mesh name="palm" file="meshes/leap_hand/palm_right.stl" scale="0.95 0.95 0.95" />
+    <mesh name="base" file="meshes/leap_hand/base.stl" scale="0.95 0.95 0.95" />
+    <mesh name="proximal" file="meshes/leap_hand/proximal.stl" scale="0.95 0.95 0.95" />
+    <mesh name="medial" file="meshes/leap_hand/medial.stl" scale="0.95 0.95 0.95" />
+    <mesh name="distal" file="meshes/leap_hand/distal.stl" scale="0.95 0.95 0.95" />
+    <mesh name="tip" file="meshes/leap_hand/tip.stl" scale="0.95 0.95 0.95" />
+    <mesh name="thumb_base" file="meshes/leap_hand/thumb_base.stl" scale="0.95 0.95 0.95" />
+    <mesh name="thumb_proximal" file="meshes/leap_hand/thumb_proximal.stl" scale="0.95 0.95 0.95" />
+    <mesh name="thumb_distal" file="meshes/leap_hand/thumb_distal.stl" scale="0.95 0.95 0.95" />
+    <mesh name="thumb_tip" file="meshes/leap_hand/thumb_tip.stl" scale="0.95 0.95 0.95" />
   </asset>
 
   
@@ -25,7 +22,7 @@
     
 
     
-   <geom solimp="0.9 0.95 0.001" solref="0.005 1" condim="6" friction="1 0.1 0.1" />
+   <geom solimp="0.9 0.95 0.001" solref="0.005 1" friction="0.8" />
 
     
     <position kp="3.0" />
@@ -37,10 +34,10 @@
       <geom group="1" type="mesh" contype="0" conaffinity="0" density="0" material="black" />
     </default>
     <default class="tip">
-      <geom type="mesh" mesh="tip" condim="6" friction="1 0.1 0.1"/>
+      <geom type="mesh" mesh="tip" friction="0.5" />
     </default>
     <default class="thumb_tip">
-      <geom type="mesh" mesh="thumb_tip" condim="6" friction="1 0.1 0.1" />
+      <geom type="mesh" mesh="thumb_tip" friction="0.5" />
     </default>
 
     
@@ -164,59 +161,59 @@
   </sensor>
 
   <worldbody>
-    <body name="palm" pos="0.000000 0.027000 -0.108000" quat="0.7071068 0 0.7071068 0">
+    <body name="palm" pos="0.000000 0.028500 -0.114000" quat="0.7071068 0 0.7071068 0">
       
-      <site name="ft_frame" pos="0.000000 -0.054000 0.000000" size="0.01 0.01 0.01" rgba="1 0 0 0" type="sphere" group="1" />
+      <site name="ft_frame" pos="0.000000 -0.057000 0.000000" size="0.01 0.01 0.01" rgba="1 0 0 0" type="sphere" group="1" />
       <site name="grip_site" pos="0.050000 -0.012000 0.00000" size="0.01 0.01 0.01" rgba="1 0 0 0" type="sphere" group="1" />
       <site name="grip_site_cylinder" pos="-0.04000 -0.03200 -0.092000" quat="1 0 0 0" size="0.005 .1" rgba=".627 .125 .941 .2" type="cylinder" group="1" />
-      <inertial pos="-0.049542 -0.42914 -0.010227" quat="0.565586 0.427629 -0.574956 0.408254" mass="0.237" diaginertia="0.000407345 0.000304759 0.000180736" />
-      <geom name="palm_visual" pos="-0.018000 0.023175 -0.031230" quat="1 0 0 0" class="visual" mesh="palm" />
-      <geom name="palm_collision_1" size="0.011 0.013 0.017" pos="-0.008100 0.007200 -0.009900" type="box" />
-      <geom name="palm_collision_2" size="0.011 0.013 0.017" pos="-0.008100 -0.033300 -0.009900" type="box" />
-      <geom name="palm_collision_3" size="0.011 0.013 0.017" pos="-0.008100 -0.073800 -0.009900" type="box" />
-      <geom name="palm_collision_4" size="0.029 0.01 0.023" pos="-0.059400 -0.070200 -0.010350" quat="0.989016 0 0 -0.147806" type="box" />
-      <geom name="palm_collision_5" size="0.01 0.06 0.015" pos="-0.027000 -0.031500 -0.002700" type="box" />
-      <geom name="palm_collision_6" size="0.005 0.06 0.01" pos="-0.028800 -0.031500 -0.021600" quat="0.923956 0 0.382499 0" type="box" />
-      <geom name="palm_collision_7" size="0.012 0.058 0.023" pos="-0.043200 -0.029700 -0.010350" type="box" />
-      <geom name="palm_collision_8" size="0.022 0.026 0.023" pos="-0.070200 -0.047700 -0.010350" type="box" />
-      <geom name="palm_collision_9" size="0.002 0.018 0.017" pos="-0.088200 -0.008100 -0.005400" type="box" />
-      <geom name="palm_collision_10" size="0.022 0.028 0.002" pos="-0.070200 -0.002700 0.009000" type="box" />
+      <inertial pos="-0.049542 -0.042914 -0.010227" quat="0.565586 0.427629 -0.574956 0.408254" mass="0.237" diaginertia="0.000407345 0.000304759 0.000180736" />
+      <geom name="palm_visual" pos="-0.019000 0.024462 -0.032965" quat="1 0 0 0" class="visual" mesh="palm" />
+      <geom name="palm_collision_1" size="0.011 0.013 0.017" pos="-0.008550 0.007600 -0.010450" type="box" />
+      <geom name="palm_collision_2" size="0.011 0.013 0.017" pos="-0.008550 -0.035150 -0.010450" type="box" />
+      <geom name="palm_collision_3" size="0.011 0.013 0.017" pos="-0.008550 -0.077900 -0.010450" type="box" />
+      <geom name="palm_collision_4" size="0.029 0.01 0.023" pos="-0.062700 -0.074100 -0.010925" quat="0.989016 0 0 -0.147806" type="box" />
+      <geom name="palm_collision_5" size="0.01 0.06 0.015" pos="-0.028500 -0.033250 -0.002850" type="box" />
+      <geom name="palm_collision_6" size="0.005 0.06 0.01" pos="-0.030400 -0.033250 -0.022800" quat="0.923956 0 0.382499 0" type="box" />
+      <geom name="palm_collision_7" size="0.012 0.058 0.023" pos="-0.045600 -0.031350 -0.010925" type="box" />
+      <geom name="palm_collision_8" size="0.022 0.026 0.023" pos="-0.074100 -0.050350 -0.010925" type="box" />
+      <geom name="palm_collision_9" size="0.002 0.018 0.017" pos="-0.093100 -0.008550 -0.005700" type="box" />
+      <geom name="palm_collision_10" size="0.022 0.028 0.002" pos="-0.074100 -0.002850 0.009500" type="box" />
 
       
-      <body name="if_bs" pos="-0.006300 0.020700 -0.016830" quat="0.500003 0.5 0.5 -0.499997">
+      <body name="if_bs" pos="-0.006650 0.021850 -0.017765" quat="0.500003 0.5 0.5 -0.499997">
         <inertial pos="-0.022516 0.033882 0.016359" quat="0.388092 0.677951 -0.247713 0.573067" mass="0.044" diaginertia="1.74972e-05 1.61504e-05 7.21342e-06" />
         <joint name="if_mcp" class="mcp" />
-        <geom name="if_bs_visual" pos="0.007560 0.006930 0.013185" quat="1 0 0 0" class="visual" mesh="base" />
-        <geom name="if_bs_collision_1" size="0.01 0.003 0.017" pos="0.000000 0.016200 0.013230" type="box" />
-        <geom name="if_bs_collision_2" size="0.014 0.02 0.01" pos="-0.024300 0.037800 0.013500" type="box" />
-        <geom name="if_bs_collision_3" size="0.017 0.003 0.01" pos="-0.023580 0.018000 0.013140" type="box" />
-        <geom name="if_bs_collision_4" size="0.01 0.012 0.004" pos="-0.026550 0.031500 0.026100" type="box" />
-        <geom name="if_bs_collision_5" size="0.007 0.01 0.002" pos="0.000000 0.004500 0.027000" type="box" />
-        <geom name="if_bs_collision_6" size="0.007 0.01 0.002" pos="0.000000 0.004500 -0.000900" type="box" />
+        <geom name="if_bs_visual" pos="0.007980 0.007315 0.013917" quat="1 0 0 0" class="visual" mesh="base" />
+        <geom name="if_bs_collision_1" size="0.01 0.003 0.017" pos="0.000000 0.017100 0.013965" type="box" />
+        <geom name="if_bs_collision_2" size="0.014 0.02 0.01" pos="-0.025650 0.039900 0.014250" type="box" />
+        <geom name="if_bs_collision_3" size="0.017 0.003 0.01" pos="-0.024890 0.019000 0.013870" type="box" />
+        <geom name="if_bs_collision_4" size="0.01 0.012 0.004" pos="-0.028025 0.033250 0.027550" type="box" />
+        <geom name="if_bs_collision_5" size="0.007 0.01 0.002" pos="0.000000 0.004750 0.028500" type="box" />
+        <geom name="if_bs_collision_6" size="0.007 0.01 0.002" pos="0.000000 0.004750 -0.000950" type="box" />
 
-        <body name="if_px" pos="-0.010980 0.034290 0.013050" quat="0.500003 -0.5 -0.499997 0.5">
+        <body name="if_px" pos="-0.011590 0.036195 0.013775" quat="0.500003 -0.5 -0.499997 0.5">
           <inertial pos="0.0075 -0.0002 -0.011" quat="0 0.707107 0 0.707107" mass="0.032" diaginertia="4.8853e-06 4.3733e-06 3.0933e-06" />
           <joint name="if_rot" class="rot" />
-          <geom name="if_px_visual" pos="0.008640 0.000180 0.000630" quat="0.500003 -0.5 -0.5 -0.499997" class="visual" mesh="proximal" />
-          <geom name="if_px_collision" size="0.017 0.013 0.011" pos="0.006750 -0.000180 -0.009900" type="box" />
+          <geom name="if_px_visual" pos="0.009120 0.000190 0.000665" quat="0.500003 -0.5 -0.5 -0.499997" class="visual" mesh="proximal" />
+          <geom name="if_px_collision" size="0.017 0.013 0.011" pos="0.007125 -0.000190 -0.010450" type="box" />
 
-          <body name="if_md" pos="0.013500 0.012870 -0.011700" quat="0.500003 0.5 -0.5 0.499997">
+          <body name="if_md" pos="0.014250 0.013585 -0.012350" quat="0.500003 0.5 -0.5 0.499997">
             <inertial pos="0.0054215 -0.029148 0.015" quat="0.687228 0.687228 0.166487 0.166487" mass="0.037" diaginertia="8.28004e-06 8.1598e-06 5.39516e-06" />
             <joint name="if_pip" class="pip" />
-            <geom name="if_md_visual" pos="0.018990 -0.007560 0.008730" quat="2.67949e-08 -1 0 0" class="visual" mesh="medial" />
-            <geom name="if_md_collision_1" size="0.008 0.003 0.013" pos="0.000000 -0.018000 0.013500" type="box" />
-            <geom name="if_md_collision_2" size="0.01 0.002 0.017" pos="0.000000 -0.014400 0.013500" type="box" />
-            <geom name="if_md_collision_3" size="0.007 0.01 0.002" pos="0.000000 -0.004050 0.027000" type="box" />
-            <geom name="if_md_collision_4" size="0.007 0.01 0.002" pos="0.000000 -0.004050 0.000000" type="box" />
-            <geom name="if_md_collision_5" size="0.017 0.011 0.013" pos="0.006750 -0.031500 0.013500" type="box" />
+            <geom name="if_md_visual" pos="0.020045 -0.007980 0.009215" quat="2.67949e-08 -1 0 0" class="visual" mesh="medial" />
+            <geom name="if_md_collision_1" size="0.008 0.003 0.013" pos="0.000000 -0.019000 0.014250" type="box" />
+            <geom name="if_md_collision_2" size="0.01 0.002 0.017" pos="0.000000 -0.015200 0.014250" type="box" />
+            <geom name="if_md_collision_3" size="0.007 0.01 0.002" pos="0.000000 -0.004275 0.028500" type="box" />
+            <geom name="if_md_collision_4" size="0.007 0.01 0.002" pos="0.000000 -0.004275 0.000000" type="box" />
+            <geom name="if_md_collision_5" size="0.017 0.011 0.013" pos="0.007125 -0.033250 0.014250" type="box" />
 
-            <body name="if_ds" pos="0.000000 -0.032490 0.000180">
+            <body name="if_ds" pos="0.000000 -0.034295 0.000190">
               <inertial pos="-0.0008794 -0.027019 0.014594" quat="0.702905 0.710643 -0.0212937 -0.0214203" mass="0.016" diaginertia="3.71863e-06 3.02396e-06 1.6518e-06" />
               <joint name="if_dip" class="dip" />
-              <geom name="if_ds_visual" pos="0.011880 -0.005490 0.012960" quat="2.67949e-08 1 0 0" class="visual" mesh="distal" />
-              <geom name="if_ds_collision_1" size="0.01 0.003 0.015" pos="0.000000 -0.015300 0.013500" type="box" />
-              <geom name="if_ds_collision_2" size="0.007 0.011 0.002" pos="0.000000 -0.005400 0.027000" type="box" />
-              <geom name="if_ds_collision_3" size="0.007 0.011 0.002" pos="0.000000 -0.005400 -0.000900" type="box" />
+              <geom name="if_ds_visual" pos="0.012540 -0.005795 0.013680" quat="2.67949e-08 1 0 0" class="visual" mesh="distal" />
+              <geom name="if_ds_collision_1" size="0.01 0.003 0.015" pos="0.000000 -0.016150 0.014250" type="box" />
+              <geom name="if_ds_collision_2" size="0.007 0.011 0.002" pos="0.000000 -0.005700 0.028500" type="box" />
+              <geom name="if_ds_collision_3" size="0.007 0.011 0.002" pos="0.000000 -0.005700 -0.000950" type="box" />
 
               <geom name="if_tip" class="tip" />
             </body>
@@ -226,40 +223,40 @@
       </body>  
 
       
-      <body name="mf_bs" pos="-0.006390 -0.020160 -0.016830" quat="0.500003 0.5 0.5 -0.499997">
+      <body name="mf_bs" pos="-0.006745 -0.021280 -0.017765" quat="0.500003 0.5 0.5 -0.499997">
         <inertial pos="-0.022516 0.033882 0.016359" quat="0.388092 0.677951 -0.247713 0.573067" mass="0.044" diaginertia="1.74972e-05 1.61504e-05 7.21342e-06" />
         <joint name="mf_mcp" class="mcp" />
-        <geom name="mf_bs_visual" pos="0.007560 0.006930 0.013185" quat="1 0 0 0" class="visual" mesh="base" />
-        <geom name="mf_bs_collision_1" size="0.01 0.003 0.017" pos="0.000000 0.016200 0.013230" type="box" />
-        <geom name="mf_bs_collision_2" size="0.014 0.02 0.01" pos="-0.024300 0.037800 0.013500" type="box" />
-        <geom name="mf_bs_collision_3" size="0.017 0.003 0.01" pos="-0.023580 0.018000 0.013140" type="box" />
-        <geom name="mf_bs_collision_4" size="0.01 0.012 0.004" pos="-0.026550 0.031500 0.026100" type="box" />
-        <geom name="mf_bs_collision_5" size="0.007 0.01 0.002" pos="0.000000 0.004500 0.027000" type="box" />
-        <geom name="mf_bs_collision_6" size="0.007 0.01 0.002" pos="0.000000 0.004500 -0.000900" type="box" />
+        <geom name="mf_bs_visual" pos="0.007980 0.007315 0.013917" quat="1 0 0 0" class="visual" mesh="base" />
+        <geom name="mf_bs_collision_1" size="0.01 0.003 0.017" pos="0.000000 0.017100 0.013965" type="box" />
+        <geom name="mf_bs_collision_2" size="0.014 0.02 0.01" pos="-0.025650 0.039900 0.014250" type="box" />
+        <geom name="mf_bs_collision_3" size="0.017 0.003 0.01" pos="-0.024890 0.019000 0.013870" type="box" />
+        <geom name="mf_bs_collision_4" size="0.01 0.012 0.004" pos="-0.028025 0.033250 0.027550" type="box" />
+        <geom name="mf_bs_collision_5" size="0.007 0.01 0.002" pos="0.000000 0.004750 0.028500" type="box" />
+        <geom name="mf_bs_collision_6" size="0.007 0.01 0.002" pos="0.000000 0.004750 -0.000950" type="box" />
 
-        <body name="mf_px" pos="-0.010980 0.034290 0.013050" quat="0.500003 -0.5 -0.499997 0.5">
+        <body name="mf_px" pos="-0.011590 0.036195 0.013775" quat="0.500003 -0.5 -0.499997 0.5">
           <inertial pos="0.0075 -0.0002 -0.011" quat="0 0.707107 0 0.707107" mass="0.032" diaginertia="4.8853e-06 4.3733e-06 3.0933e-06" />
           <joint name="mf_rot" class="rot" />
-          <geom name="mf_px_visual" pos="0.008640 0.000270 0.000630" quat="0.500003 -0.5 -0.5 -0.499997" class="visual" mesh="proximal" />
-          <geom name="mf_px_collision" size="0.017 0.013 0.011" pos="0.006750 -0.000180 -0.009900" type="box" />
+          <geom name="mf_px_visual" pos="0.009120 0.000285 0.000665" quat="0.500003 -0.5 -0.5 -0.499997" class="visual" mesh="proximal" />
+          <geom name="mf_px_collision" size="0.017 0.013 0.011" pos="0.007125 -0.000190 -0.010450" type="box" />
 
-          <body name="mf_md" pos="0.013500 0.012870 -0.011700" quat="0.500003 0.5 -0.5 0.499997">
+          <body name="mf_md" pos="0.014250 0.013585 -0.012350" quat="0.500003 0.5 -0.5 0.499997">
             <inertial pos="0.0054215 -0.029148 0.015" quat="0.687228 0.687228 0.166487 0.166487" mass="0.037" diaginertia="8.28004e-06 8.1598e-06 5.39516e-06" />
             <joint name="mf_pip" class="pip" />
-            <geom name="mf_md_visual" pos="0.018990 -0.007560 0.008730" quat="1.32679e-06 -1 0 0" class="visual" mesh="medial" />
-            <geom name="mf_md_collision_1" size="0.008 0.003 0.013" pos="0.000000 -0.018000 0.013500" type="box" />
-            <geom name="mf_md_collision_2" size="0.01 0.002 0.017" pos="0.000000 -0.014400 0.013500" type="box" />
-            <geom name="mf_md_collision_3" size="0.007 0.01 0.002" pos="0.000000 -0.004050 0.027000" type="box" />
-            <geom name="mf_md_collision_4" size="0.007 0.01 0.002" pos="0.000000 -0.004050 0.000000" type="box" />
-            <geom name="mf_md_collision_5" size="0.017 0.011 0.013" pos="0.006750 -0.031500 0.013500" type="box" />
+            <geom name="mf_md_visual" pos="0.020045 -0.007980 0.009215" quat="1.32679e-06 -1 0 0" class="visual" mesh="medial" />
+            <geom name="mf_md_collision_1" size="0.008 0.003 0.013" pos="0.000000 -0.019000 0.014250" type="box" />
+            <geom name="mf_md_collision_2" size="0.01 0.002 0.017" pos="0.000000 -0.015200 0.014250" type="box" />
+            <geom name="mf_md_collision_3" size="0.007 0.01 0.002" pos="0.000000 -0.004275 0.028500" type="box" />
+            <geom name="mf_md_collision_4" size="0.007 0.01 0.002" pos="0.000000 -0.004275 0.000000" type="box" />
+            <geom name="mf_md_collision_5" size="0.017 0.011 0.013" pos="0.007125 -0.033250 0.014250" type="box" />
 
-            <body name="mf_ds" pos="0.000000 -0.032490 0.000180">
+            <body name="mf_ds" pos="0.000000 -0.034295 0.000190">
               <inertial pos="-0.0008794 -0.027019 0.014594" quat="0.702905 0.710643 -0.0212937 -0.0214203" mass="0.016" diaginertia="3.71863e-06 3.02396e-06 1.6518e-06" />
               <joint name="mf_dip" class="dip" />
-              <geom name="mf_ds_visual" pos="0.011880 -0.005490 0.013050" quat="1.32679e-06 1 0 0" class="visual" mesh="distal" />
-              <geom name="mf_ds_collision_1" size="0.01 0.003 0.015" pos="0.000000 -0.015300 0.013500" type="box" />
-              <geom name="mf_ds_collision_2" size="0.007 0.011 0.002" pos="0.000000 -0.005400 0.027000" type="box" />
-              <geom name="mf_ds_collision_3" size="0.007 0.011 0.002" pos="0.000000 -0.005400 -0.000900" type="box" />
+              <geom name="mf_ds_visual" pos="0.012540 -0.005795 0.013775" quat="1.32679e-06 1 0 0" class="visual" mesh="distal" />
+              <geom name="mf_ds_collision_1" size="0.01 0.003 0.015" pos="0.000000 -0.016150 0.014250" type="box" />
+              <geom name="mf_ds_collision_2" size="0.007 0.011 0.002" pos="0.000000 -0.005700 0.028500" type="box" />
+              <geom name="mf_ds_collision_3" size="0.007 0.011 0.002" pos="0.000000 -0.005700 -0.000950" type="box" />
 
               <geom name="mf_tip" class="tip" />
             </body>
@@ -269,40 +266,40 @@
       </body>  
 
       
-      <body name="rf_bs" pos="-0.006381 -0.061020 -0.016830" quat="0.500003 0.5 0.5 -0.499997">
+      <body name="rf_bs" pos="-0.006735 -0.064410 -0.017765" quat="0.500003 0.5 0.5 -0.499997">
         <inertial pos="-0.022516 0.033882 0.016359" quat="0.388092 0.677951 -0.247713 0.573067" mass="0.044" diaginertia="1.74972e-05 1.61504e-05 7.21342e-06" />
         <joint name="rf_mcp" class="mcp" />
-        <geom name="rf_bs_visual" pos="0.007560 0.006930 0.013185" quat="1 0 0 0" class="visual" mesh="base" />
-        <geom name="rf_bs_collision_1" size="0.01 0.003 0.017" pos="0.000000 0.016200 0.013230" type="box" />
-        <geom name="rf_bs_collision_2" size="0.014 0.02 0.01" pos="-0.024300 0.037800 0.013500" type="box" />
-        <geom name="rf_bs_collision_3" size="0.017 0.003 0.01" pos="-0.023580 0.018000 0.013140" type="box" />
-        <geom name="rf_bs_collision_4" size="0.01 0.012 0.004" pos="-0.026550 0.031500 0.026100" type="box" />
-        <geom name="rf_bs_collision_5" size="0.007 0.01 0.002" pos="0.000000 0.004500 0.027000" type="box" />
-        <geom name="rf_bs_collision_6" size="0.007 0.01 0.002" pos="0.000000 0.004500 -0.000900" type="box" />
+        <geom name="rf_bs_visual" pos="0.007980 0.007315 0.013917" quat="1 0 0 0" class="visual" mesh="base" />
+        <geom name="rf_bs_collision_1" size="0.01 0.003 0.017" pos="0.000000 0.017100 0.013965" type="box" />
+        <geom name="rf_bs_collision_2" size="0.014 0.02 0.01" pos="-0.025650 0.039900 0.014250" type="box" />
+        <geom name="rf_bs_collision_3" size="0.017 0.003 0.01" pos="-0.024890 0.019000 0.013870" type="box" />
+        <geom name="rf_bs_collision_4" size="0.01 0.012 0.004" pos="-0.028025 0.033250 0.027550" type="box" />
+        <geom name="rf_bs_collision_5" size="0.007 0.01 0.002" pos="0.000000 0.004750 0.028500" type="box" />
+        <geom name="rf_bs_collision_6" size="0.007 0.01 0.002" pos="0.000000 0.004750 -0.000950" type="box" />
 
-        <body name="rf_px" pos="-0.010980 0.034290 0.013050" quat="0.500003 -0.5 -0.499997 0.5">
+        <body name="rf_px" pos="-0.011590 0.036195 0.013775" quat="0.500003 -0.5 -0.499997 0.5">
           <inertial pos="0.0075 -0.0002 -0.011" quat="0 0.707107 0 0.707107" mass="0.032" diaginertia="4.8853e-06 4.3733e-06 3.0933e-06" />
           <joint name="rf_rot" class="rot" />
-          <geom name="rf_px_visual" pos="0.008640 0.000270 0.000630" quat="0.500003 -0.5 -0.5 -0.499997" class="visual" mesh="proximal" />
-          <geom name="rf_px_collision" size="0.017 0.013 0.011" pos="0.006750 -0.000180 -0.009900" type="box" />
+          <geom name="rf_px_visual" pos="0.009120 0.000285 0.000665" quat="0.500003 -0.5 -0.5 -0.499997" class="visual" mesh="proximal" />
+          <geom name="rf_px_collision" size="0.017 0.013 0.011" pos="0.007125 -0.000190 -0.010450" type="box" />
 
-          <body name="rf_md" pos="0.013500 0.012870 -0.011700" quat="0.500003 0.5 -0.5 0.499997">
+          <body name="rf_md" pos="0.014250 0.013585 -0.012350" quat="0.500003 0.5 -0.5 0.499997">
             <inertial pos="0.0054215 -0.029148 0.015" quat="0.687228 0.687228 0.166487 0.166487" mass="0.037" diaginertia="8.28004e-06 8.1598e-06 5.39516e-06" />
             <joint name="rf_pip" class="pip" />
-            <geom name="rf_md_visual" pos="0.018990 -0.007560 0.008730" quat="1.32679e-06 -1 0 0" class="visual" mesh="medial" />
-            <geom name="rf_md_collision_1" size="0.008 0.003 0.013" pos="0.000000 -0.018000 0.013500" type="box" />
-            <geom name="rf_md_collision_2" size="0.01 0.002 0.017" pos="0.000000 -0.014400 0.013500" type="box" />
-            <geom name="rf_md_collision_3" size="0.007 0.01 0.002" pos="0.000000 -0.004050 0.027000" type="box" />
-            <geom name="rf_md_collision_4" size="0.007 0.01 0.002" pos="0.000000 -0.004050 0.000000" type="box" />
-            <geom name="rf_md_collision_5" size="0.017 0.011 0.013" pos="0.006750 -0.031500 0.013500" type="box" />
+            <geom name="rf_md_visual" pos="0.020045 -0.007980 0.009215" quat="1.32679e-06 -1 0 0" class="visual" mesh="medial" />
+            <geom name="rf_md_collision_1" size="0.008 0.003 0.013" pos="0.000000 -0.019000 0.014250" type="box" />
+            <geom name="rf_md_collision_2" size="0.01 0.002 0.017" pos="0.000000 -0.015200 0.014250" type="box" />
+            <geom name="rf_md_collision_3" size="0.007 0.01 0.002" pos="0.000000 -0.004275 0.028500" type="box" />
+            <geom name="rf_md_collision_4" size="0.007 0.01 0.002" pos="0.000000 -0.004275 0.000000" type="box" />
+            <geom name="rf_md_collision_5" size="0.017 0.011 0.013" pos="0.007125 -0.033250 0.014250" type="box" />
 
-            <body name="rf_ds" pos="0.000000 -0.032481 0.000180">
+            <body name="rf_ds" pos="0.000000 -0.034285 0.000190">
               <inertial pos="-0.0008794 -0.027019 0.014594" quat="0.702905 0.710643 -0.0212937 -0.0214203" mass="0.016" diaginertia="3.71863e-06 3.02396e-06 1.6518e-06" />
               <joint name="rf_dip" class="dip" />
-              <geom name="rf_ds_visual" pos="0.011880 -0.005490 0.013050" quat="1.32679e-06 1 0 0" class="visual" mesh="distal" />
-              <geom name="rf_ds_collision_1" size="0.01 0.003 0.015" pos="0.000000 -0.015300 0.013500" type="box" />
-              <geom name="rf_ds_collision_2" size="0.007 0.011 0.002" pos="0.000000 -0.005400 0.027000" type="box" />
-              <geom name="rf_ds_collision_3" size="0.007 0.011 0.002" pos="0.000000 -0.005400 -0.000900" type="box" />
+              <geom name="rf_ds_visual" pos="0.012540 -0.005795 0.013775" quat="1.32679e-06 1 0 0" class="visual" mesh="distal" />
+              <geom name="rf_ds_collision_1" size="0.01 0.003 0.015" pos="0.000000 -0.016150 0.014250" type="box" />
+              <geom name="rf_ds_collision_2" size="0.007 0.011 0.002" pos="0.000000 -0.005700 0.028500" type="box" />
+              <geom name="rf_ds_collision_3" size="0.007 0.011 0.002" pos="0.000000 -0.005700 -0.000950" type="box" />
 
               <geom name="rf_tip" class="tip" />
             </body>
@@ -312,37 +309,37 @@
       </body>  
 
       
-      <body name="th_mp" pos="-0.062370 -0.001080 -0.019440" quat="0.707109 0 0.707105 0">
+      <body name="th_mp" pos="-0.065835 -0.001140 -0.020520" quat="0.707109 0 0.707105 0">
         <inertial pos="0.0075 -0.0002 -0.011" quat="0 0.707107 0 0.707107" mass="0.032" diaginertia="4.8853e-06 4.3733e-06 3.0933e-06" />
         <joint name="th_cmc" class="thumb_cmc" />
-        <geom name="th_mp_visual" pos="-0.004770 0.000270 0.000702" quat="0.500003 -0.5 -0.5 -0.499997" class="visual" mesh="proximal" />
-        <geom name="th_mp_collision" size="0.017 0.013 0.011" pos="-0.006750 -0.000180 -0.009900" type="box" />
+        <geom name="th_mp_visual" pos="-0.005035 0.000285 0.000741" quat="0.500003 -0.5 -0.5 -0.499997" class="visual" mesh="proximal" />
+        <geom name="th_mp_collision" size="0.017 0.013 0.011" pos="-0.007125 -0.000190 -0.010450" type="box" />
 
-        <body name="th_bs" pos="0.000000 0.012870 -0.011700" quat="0.500003 0.5 -0.5 0.499997">
+        <body name="th_bs" pos="0.000000 0.013585 -0.012350" quat="0.500003 0.5 -0.5 0.499997">
           <inertial pos="0 0 -0.0070806" quat="0.707107 0.707107 0 0" mass="0.003" diaginertia="6.1932e-07 5.351e-07 2.1516e-07" />
           <joint name="th_axl" class="thumb_axl" />
-          <geom name="th_bs_visual" pos="0.010764 0.000000 -0.014220" quat="0.707109 0.707105 0 0" class="visual" mesh="thumb_base" />
-          <geom name="th_bs_collision_1" size="0.009 0.0165 0.002" pos="0.000000 0.000000 -0.001350" type="box" />
-          <geom name="th_bs_collision_2" size="0.007 0.002 0.01" pos="0.000000 -0.013500 -0.011700" type="box" />
-          <geom name="th_bs_collision_3" size="0.007 0.002 0.01" pos="0.000000 0.013500 -0.011700" type="box" />
+          <geom name="th_bs_visual" pos="0.011362 0.000000 -0.015010" quat="0.707109 0.707105 0 0" class="visual" mesh="thumb_base" />
+          <geom name="th_bs_collision_1" size="0.009 0.0165 0.002" pos="0.000000 0.000000 -0.001425" type="box" />
+          <geom name="th_bs_collision_2" size="0.007 0.002 0.01" pos="0.000000 -0.014250 -0.012350" type="box" />
+          <geom name="th_bs_collision_3" size="0.007 0.002 0.01" pos="0.000000 0.014250 -0.012350" type="box" />
 
-          <body name="th_px" pos="0.000000 0.013050 -0.015300" quat="0.707109 -0.707105 0 0">
+          <body name="th_px" pos="0.000000 0.013775 -0.016150" quat="0.707109 -0.707105 0 0">
             <inertial pos="-0.0020593 0.015912 -0.013733" quat="0.698518 0.697382 -0.104933 0.121324" mass="0.038" diaginertia="9.87104e-06 9.32653e-06 4.36203e-06" />
             <joint name="th_mcp" class="thumb_mcp" />
-            <geom name="th_px_visual" pos="0.039510 0.052110 -0.007740" quat="1 0 0 0" class="visual" mesh="thumb_proximal" />
-            <geom name="th_px_collision_1" size="0.01 0.02 0.012" pos="0.000000 0.009450 -0.012600" type="box" />
-            <geom name="th_px_collision_2" size="0.01 0.002 0.016" pos="0.000000 0.027900 -0.013500" type="box" />
-            <geom name="th_px_collision_3" size="0.007 0.01 0.002" pos="0.000000 0.037800 0.000900" type="box" />
-            <geom name="th_px_collision_4" size="0.007 0.01 0.002" pos="0.000000 0.037800 -0.026100" type="box" />
-            <geom name="th_px_collision_5" size="0.005 0.012 0.009" pos="-0.012150 0.015750 -0.010490" type="box" />
+            <geom name="th_px_visual" pos="0.041705 0.055005 -0.008170" quat="1 0 0 0" class="visual" mesh="thumb_proximal" />
+            <geom name="th_px_collision_1" size="0.01 0.02 0.012" pos="0.000000 0.009975 -0.013300" type="box" />
+            <geom name="th_px_collision_2" size="0.01 0.002 0.016" pos="0.000000 0.029450 -0.014250" type="box" />
+            <geom name="th_px_collision_3" size="0.007 0.01 0.002" pos="0.000000 0.039900 0.000950" type="box" />
+            <geom name="th_px_collision_4" size="0.007 0.01 0.002" pos="0.000000 0.039900 -0.027550" type="box" />
+            <geom name="th_px_collision_5" size="0.005 0.012 0.009" pos="-0.012825 0.016625 -0.011073" type="box" />
 
-            <body name="th_ds" pos="0.000000 0.041940 0.000180" quat="1.32679e-06 0 0 1">
+            <body name="th_ds" pos="0.000000 0.044270 0.000190" quat="1.32679e-06 0 0 1">
               <inertial pos="0.00096191 -0.024203 -0.014419" quat="0.35287 0.311272 -0.632839 0.614904" mass="0.049" diaginertia="2.08591e-05 2.0402e-05 4.71335e-06" />
               <joint name="th_ipl" class="thumb_ipl" />
-              <geom name="th_ds_visual" pos="0.056250 0.070560 0.044010" quat="1 0 0 0" class="visual" mesh="thumb_distal" />
-              <geom name="th_ds_collision_1" size="0.01 0.018 0.012" pos="0.000000 -0.007650 -0.013500" type="box" />
-              <geom name="th_ds_collision_2" size="0.01 0.002 0.015" pos="0.000000 -0.026100 -0.012600" type="box" />
-              <geom name="th_ds_collision_3" size="0.004 0.012 0.009" pos="0.013500 -0.015750 -0.010350" type="box" />
+              <geom name="th_ds_visual" pos="0.059375 0.074480 0.046455" quat="1 0 0 0" class="visual" mesh="thumb_distal" />
+              <geom name="th_ds_collision_1" size="0.01 0.018 0.012" pos="0.000000 -0.008075 -0.014250" type="box" />
+              <geom name="th_ds_collision_2" size="0.01 0.002 0.015" pos="0.000000 -0.027550 -0.013300" type="box" />
+              <geom name="th_ds_collision_3" size="0.004 0.012 0.009" pos="0.014250 -0.016625 -0.010925" type="box" />
 
               <geom name="th_tip" class="thumb_tip" />
             </body>

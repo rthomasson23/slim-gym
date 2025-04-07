@@ -466,7 +466,7 @@ class SequentialPickTrain(SingleArmEnv):
         if object_1_placed and object_2_placed:
             return True, True, True, True, False
         elif (elapsed_time > 180) or dropped_bool_1 or dropped_bool_2:
-            return True, False, True
+            return True, False, False, False, True
         elif object_1_placed and not object_2_placed:
             return False, False, True, False, False
         elif object_2_placed and not object_1_placed:
