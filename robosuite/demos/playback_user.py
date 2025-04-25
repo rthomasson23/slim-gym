@@ -42,8 +42,8 @@ if __name__ == "__main__":
     '''
     # subject_name = "subject_1"
     
-    task = "Bookshelf"
-    robot = "Panda"
+    task = "SequentialPick"
+    robot = "PandaSSLIM"
 
 
     # Create argument configuration
@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
     # Wrap this environment in a data collection wrapper
     # data_directory = "robosuite/data/" + subject_name + "/" + task + "/" + robot + "/" + episode
-    data_directory = "robosuite/data/subject_3/Bookshelf/Panda/ep_1709141113_4248776"
+    data_directory = "/home/rthom/Documents/Research/TRI/slim_opensource/robosuite/data/capprin/SequentialPick/PandaSSLIM/ep_1743818301_5842593"
     
     if task != "Train":
         env = DataCollectionWrapper(env, data_directory)

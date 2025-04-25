@@ -1,9 +1,5 @@
 """
-<<<<<<< HEAD
-6-DoF gripper with its open/close variant
-=======
 SSLIM Gripper
->>>>>>> task/cabinet_arena
 """
 import numpy as np
 

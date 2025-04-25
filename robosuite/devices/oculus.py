@@ -238,7 +238,8 @@ class Oculus(Device):
             self.dq[[1, 5, 9, 15]] = 0
             self.dq[12] = -0.7
             self.dq[13] = -0.7
-            self.dq[14] = 0.1
+            # self.dq[14] = 0.1
+            self.dq[14] = -2.443
             print("Using Leap Motion")
         
         else:
@@ -300,8 +301,8 @@ class Oculus(Device):
             self.dq[[1, 5, 9, 15]] = 0
             self.dq[12] = -0.7
             self.dq[13] = -0.7
-            self.dq[14] = 0.1
-            # print("Using Leap Motion")
+            # self.dq[14] = 0.1
+            self.dq[14] = -2.443
             self.dq_actual = self.dq
         else:
             # self.sslim_state = 2
@@ -331,7 +332,8 @@ class Oculus(Device):
             self.dq[[1, 5, 9, 15]] = 0
             self.dq[12] = -0.7
             self.dq[13] = -0.7
-            self.dq[14] = 0.1
+            # self.dq[14] = 0.1
+            self.dq[14] = -2.443
             self.dq_actual = self.dq
         else:
             # self.sslim_state = 2
@@ -492,7 +494,8 @@ class Oculus(Device):
                     self.dq[10] += self.alpha * self.pos_sensitivity
                     self.dq[11] += self.alpha * self.pos_sensitivity
                     self.dq[12] += 2* self.alpha * self.pos_sensitivity
-                    self.dq[14] = 6.698 * self.dq[12]**2 + 0.405 * self.dq[12] - 3.188
+                    # self.dq[14] = 6.698 * self.dq[12]**2 + 0.405 * self.dq[12] - 3.188
+                    self.dq[14] = -2.443
                     self.dq[15] += 0.5*self.alpha * self.pos_sensitivity
 
             if self._buttons[1]:
@@ -507,7 +510,8 @@ class Oculus(Device):
                     self.dq[10] -= self.alpha * self.pos_sensitivity
                     self.dq[11] -= self.alpha * self.pos_sensitivity
                     self.dq[12] -= 2 * self.alpha * self.pos_sensitivity
-                    self.dq[14] = 6.698 * self.dq[12]**2 + 0.405 * self.dq[12] - 3.188
+                    # self.dq[14] = 6.698 * self.dq[12]**2 + 0.405 * self.dq[12] - 3.188
+                    self.dq[14] = -2.443
                     self.dq[15] -=  0.5*self.alpha * self.pos_sensitivity
 
         else:                
