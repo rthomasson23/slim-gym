@@ -19,6 +19,7 @@ ROBOT_CLASS_MAPPING = {
     "PandaSSLIM": SingleArm,
     "PandaSSLIMOG": SingleArm,
     "Flexiv": SingleArm,
+    "PandaLEAP": SingleArm,
 }
 
 BIMANUAL_ROBOTS = {k.lower() for k, v in ROBOT_CLASS_MAPPING.items() if v == Bimanual}

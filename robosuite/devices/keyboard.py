@@ -4,6 +4,7 @@ Driver class for Keyboard controller.
 
 import glfw
 import numpy as np
+import copy
 
 from robosuite.devices import Device
 from robosuite.utils.transform_utils import rotation_matrix
@@ -62,7 +63,13 @@ class Keyboard(Device):
         self.rotation = np.array([[-1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, -1.0]])
         self.raw_drotation = np.zeros(3)  # immediate roll, pitch, yaw delta values from keyboard hits
         self.last_drotation = np.zeros(3)
-        self.dq = np.zeros(9)  # Gripper DOFs
+        # initialize gripper joint positions
+        self.dq = -np.ones(16)*0.64
+        self.dq[[1, 5, 9, 15]] = 0
+        self.dq[12] = -0.7
+        self.dq[13] = -0.7
+        self.dq[14] = 2.443
+
         self.pos = init_pos  # (x, y, z)
         self.last_pos = np.zeros(3)
         self.grasp = False
@@ -91,12 +98,16 @@ class Keyboard(Device):
             self.raw_drotation - self.last_drotation
         )  # create local variable to return, then reset internal drotation
         self.last_drotation = np.array(self.raw_drotation)
+
+        dq_clipped = copy.copy(self.dq)
+        dq_clipped[12] = min(0.7, dq_clipped[12])
+        # dq_clipped[14] = max(-0.8, dq_clipped[14])
         return dict(
             dpos=dpos,
             rotation=self.rotation,
             raw_drotation=raw_drotation,
             grasp=int(self.grasp),
-            dq = self.dq,
+            dq = dq_clipped,
             reset=self._reset_state,
         )
 
@@ -190,6 +201,39 @@ class Keyboard(Device):
                 self.dq[4] -= self.alpha * self.pos_sensitivity
                 self.dq[5] -= self.alpha * self.pos_sensitivity
                 self.dq[6] -= self.alpha2 * self.pos_sensitivity
+
+        if key == glfw.KEY_I:
+            if self.dq[0] <= 1.5:
+                self.dq[0] += self.alpha * self.pos_sensitivity
+                self.dq[2] += self.alpha * self.pos_sensitivity
+                self.dq[3] += self.alpha * self.pos_sensitivity
+                self.dq[4] += self.alpha * self.pos_sensitivity
+                self.dq[6] += self.alpha * self.pos_sensitivity
+                self.dq[7] += self.alpha * self.pos_sensitivity
+                self.dq[8] += self.alpha * self.pos_sensitivity
+                self.dq[10] += self.alpha * self.pos_sensitivity
+                self.dq[11] += self.alpha * self.pos_sensitivity
+                self.dq[12] += 2 * self.alpha * self.pos_sensitivity
+                # self.dq[14] -= 3.5 *self.alpha * self.pos_sensitivity
+                self.dq[14] = 2.443
+                self.dq[15] += 0.5*self.alpha * self.pos_sensitivity
+
+
+        if key == glfw.KEY_O:
+            if self.dq[0] >= -1:
+                self.dq[0] -= self.alpha * self.pos_sensitivity
+                self.dq[2] -= self.alpha * self.pos_sensitivity
+                self.dq[3] -= self.alpha * self.pos_sensitivity
+                self.dq[4] -= self.alpha * self.pos_sensitivity
+                self.dq[6] -= self.alpha * self.pos_sensitivity
+                self.dq[7] -= self.alpha * self.pos_sensitivity
+                self.dq[8] -= self.alpha * self.pos_sensitivity
+                self.dq[10] -= self.alpha * self.pos_sensitivity
+                self.dq[11] -= self.alpha * self.pos_sensitivity
+                self.dq[12] -= 2 * self.alpha * self.pos_sensitivity
+                # self.dq[14] += 3.5 *self.alpha * self.pos_sensitivity
+                self.dq[14] = 2.443
+                self.dq[15] -= 0.5 *self.alpha * self.pos_sensitivity
 
 
 

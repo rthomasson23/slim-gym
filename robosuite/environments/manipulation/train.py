@@ -298,13 +298,17 @@ class Train(SingleArmEnv):
             name=f"base_object",
             size=[00.035, 0.058, 0.062],
             rgba=[1, 0, 0, 1],
-            material=redwood,)
+            material=redwood,
+            density=20,
+            friction=[1, 0.005, 0.0001])
     
         self.phantom_object = BoxObject(
             name=f"phantom_object",
             size=[00.035, 0.058, 0.062],
             rgba=[1, 0, 0, 1],
-            material=redwood,)
+            material=redwood,
+            density=20,
+            friction=[1, 0.005, 0.0001])
 
         self.place_object = [
             BoxObject(

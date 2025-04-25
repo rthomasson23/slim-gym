@@ -7,8 +7,8 @@ from collections import namedtuple
 
 
 import numpy as np
-import rospy
-from sensor_msgs.msg import Joy
+# import rospy
+# from sensor_msgs.msg import Joy
 import glfw
 import sys
 import copy 
@@ -184,7 +184,7 @@ class OculusPolicy():
     
 class Oculus(Device):
 
-    def __init__(self, env, task, pos_sensitivity=1.0, rot_sensitivity=1.0, use_robotiq=False, drawer=False, hand="right"):
+    def __init__(self, env, task, pos_sensitivity=1.0, rot_sensitivity=1.0, use_robotiq=False, use_leap=False, drawer=False, hand="right"):
         self.env = env
 
         self.hand = hand
@@ -199,11 +199,12 @@ class Oculus(Device):
 
         # turn this value to true if using Robotiq gripper, false if using SSLIM
         self.use_robotiq = use_robotiq
+        self.use_leap = use_leap
         self.symmetric = True
         self.use_ori = True
         self.task = task
 
-        self.alpha = 0.04
+        self.alpha = 0.02
         self.alpha2 = 0.02
 
         self.pos_sensitivity = pos_sensitivity
@@ -213,25 +214,37 @@ class Oculus(Device):
         self.x, self.y, self.z = 0, 0, 0
         self.roll, self.pitch, self.yaw = 0, 0, 0
 
-
-
-        if self.use_robotiq:
-            self.dq = [0]
-        else:
-            self.dq = np.zeros(7)
-
         if self.task == "Bookshelf" or self.task == "BookshelfTrain":
             print("Bookshelf task")
             self.thumb_pos = -0.6
         elif self.task == "DrawerPick" or self.task == "DrawerPickTrain":
             print("Drawer task")
             self.thumb_pos = 1
-        elif self.task == "ConstrainedReorient" or self. task == "ConstrainedReorientTrain":
+        elif self.task == "ConstrainedReorient" or self.task == "ConstrainedReorientTrain":
             print("Constrained Reorient task")
             self.thumb_pos = 0.6
+        elif self.task == "SequentialPick" or self.task == "SequentialPickTrain":
+            print("Sequential Pick task")
+            self.thumb_pos = 1.0
         else:
             print("Train task")
-            self.thumb_pos = 0
+            self.thumb_pos = 1.0
+
+        if self.use_robotiq:
+            self.dq = [0]
+
+        elif self.use_leap:
+            self.dq = -np.ones(16)*0.64
+            self.dq[[1, 5, 9, 15]] = 0
+            self.dq[12] = -0.7
+            self.dq[13] = -0.7
+            # self.dq[14] = 0.1
+            self.dq[14] = -2.443
+            print("Using Leap Motion")
+        
+        else:
+            self.dq = np.zeros(7)
+            self.dq[4] = self.thumb_pos
             
         
         self.pinch = False
@@ -283,9 +296,18 @@ class Oculus(Device):
         if self.use_robotiq:
             self.dq = [-1]
             self.dq_actual = [-1]
+        elif self.use_leap:
+            self.dq = -np.ones(16)*0.64
+            self.dq[[1, 5, 9, 15]] = 0
+            self.dq[12] = -0.7
+            self.dq[13] = -0.7
+            # self.dq[14] = 0.1
+            self.dq[14] = -2.443
+            self.dq_actual = self.dq
         else:
             # self.sslim_state = 2
             self.dq = np.zeros(7)
+            self.dq[4] = self.thumb_pos
             self.dq_actual = np.zeros(7)
 
     
@@ -305,6 +327,14 @@ class Oculus(Device):
         if self.use_robotiq:
             self.dq = [-1]
             self.dq_actual = [-1]
+        elif self.use_leap:
+            self.dq = -np.ones(16)*0.64
+            self.dq[[1, 5, 9, 15]] = 0
+            self.dq[12] = -0.7
+            self.dq[13] = -0.7
+            # self.dq[14] = 0.1
+            self.dq[14] = -2.443
+            self.dq_actual = self.dq
         else:
             # self.sslim_state = 2
             self.dq = np.zeros(7)
@@ -331,15 +361,35 @@ class Oculus(Device):
         #     rpy = mat2euler(action_ori)
         #     self.roll, self.pitch, self.yaw = rpy
 
+        if self.task == "SequentialPick" or self.task == "SequentialPickTrain":
+            if self.use_leap:
+                self._control = [
+                    self.x,
+                    self.y,
+                    1.652,
+                    self.roll,
+                    0.0,
+                    self.yaw,
+            ]
+            else:
+                self._control = [
+                    self.x,
+                    self.y,
+                    1.652,
+                    0.0,
+                    self.pitch, 
+                    self.yaw,
+            ]
+        else:
 
-        self._control = [
-            self.x,
-            self.y,
-            self.z,
-            self.roll,
-            self.pitch,
-            self.yaw,
-        ]
+            self._control = [
+                self.x,
+                self.y,
+                self.z,
+                self.roll,
+                self.pitch,
+                self.yaw,
+            ]
 
     def on_press(self, window, key, scancode, action, mods):
         """
@@ -431,9 +481,42 @@ class Oculus(Device):
                 self.dq[0] = max(-1, self.dq[0] - 0.1)
             self.dq_actual = self.dq
 
+        elif self.use_leap:
+            if self._buttons[0]:
+                if self.dq[0] <= 0.0:
+                    self.dq[0] += self.alpha * self.pos_sensitivity
+                    self.dq[2] += self.alpha * self.pos_sensitivity
+                    self.dq[3] += self.alpha * self.pos_sensitivity
+                    self.dq[4] += self.alpha * self.pos_sensitivity
+                    self.dq[6] += self.alpha * self.pos_sensitivity
+                    self.dq[7] += self.alpha * self.pos_sensitivity
+                    self.dq[8] += self.alpha * self.pos_sensitivity
+                    self.dq[10] += self.alpha * self.pos_sensitivity
+                    self.dq[11] += self.alpha * self.pos_sensitivity
+                    self.dq[12] += 2* self.alpha * self.pos_sensitivity
+                    # self.dq[14] = 6.698 * self.dq[12]**2 + 0.405 * self.dq[12] - 3.188
+                    self.dq[14] = -2.443
+                    self.dq[15] += 0.5*self.alpha * self.pos_sensitivity
+
+            if self._buttons[1]:
+                if self.dq[0] >= -0.64:
+                    self.dq[0] -= self.alpha * self.pos_sensitivity
+                    self.dq[2] -= self.alpha * self.pos_sensitivity
+                    self.dq[3] -= self.alpha * self.pos_sensitivity
+                    self.dq[4] -= self.alpha * self.pos_sensitivity
+                    self.dq[6] -= self.alpha * self.pos_sensitivity
+                    self.dq[7] -= self.alpha * self.pos_sensitivity
+                    self.dq[8] -= self.alpha * self.pos_sensitivity
+                    self.dq[10] -= self.alpha * self.pos_sensitivity
+                    self.dq[11] -= self.alpha * self.pos_sensitivity
+                    self.dq[12] -= 2 * self.alpha * self.pos_sensitivity
+                    # self.dq[14] = 6.698 * self.dq[12]**2 + 0.405 * self.dq[12] - 3.188
+                    self.dq[14] = -2.443
+                    self.dq[15] -=  0.5*self.alpha * self.pos_sensitivity
+
         else:                
             if self._buttons[0]:
-                if self.dq[0] <= 0.8:
+                if self.dq[0] <= 0.6:
                     self.dq[0] += self.alpha * self.pos_sensitivity
                     self.dq[2] += self.alpha * self.pos_sensitivity
                     self.dq[5] += self.alpha * self.pos_sensitivity
@@ -448,7 +531,7 @@ class Oculus(Device):
                 self.dq_actual[6] = min(self.dq[6], 1.35 - self.dq[5])
 
             if self._buttons[1]:
-                if self.dq[0] >= -.8:
+                if self.dq[0] >= -.6:
                     self.dq[0] -= self.alpha * self.pos_sensitivity
                     self.dq[2] -= self.alpha * self.pos_sensitivity
 
@@ -473,13 +556,17 @@ class Oculus(Device):
             elif self.task == "DrawerPick" or self.task == "DrawerPickTrain":
                 self.dq_actual[4] = np.abs(self.dq_actual[0])*(-1) + 1
 
+        dq_clipped = copy.copy(self.dq)
+        if self.use_leap:
+            dq_clipped[12] = min(0.7, dq_clipped[12])
+            dq_clipped[14] = max(-1.0, dq_clipped[14])
 
         return dict(
             dpos=dpos,
             rotation=self.rotation,
             raw_drotation=np.array([roll, pitch, yaw]),
             grasp=self.control_gripper,
-            dq=self.dq_actual,
+            dq=dq_clipped,
             reset=self._reset_state,
         )
     

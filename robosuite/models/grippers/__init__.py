@@ -20,7 +20,7 @@ from .sslim_hand import SSLIM_Hand
 from .sslim_hand import SSLIM_Hand2
 from .robotiq_2f85 import Robotiq_2F85
 from .robotiq_2f85 import Robotiq_2F85_wrist
-
+from .leap_hand import LEAP_Hand
 
 GRIPPER_MAPPING = {
     "RethinkGripper": RethinkGripper,
@@ -43,6 +43,7 @@ GRIPPER_MAPPING = {
     "SSLIMHand2": SSLIM_Hand2,
     "Robotiq_2F85": Robotiq_2F85,    # from mujoco menagerie
     "Robotiq_2F85_wrist": Robotiq_2F85_wrist,   # from mujoco menagerie 4 wrist
+    "LEAP_Hand": LEAP_Hand,
     None: NullGripper,
 }
 

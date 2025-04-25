@@ -183,7 +183,7 @@ if __name__ == "__main__":
     ''' 
     ADD THE USER NAME HERE!!!!
     '''
-    subject_name = "davinci"
+    subject_name = "test"
     hand = "right"
     device = 'oculus'
 
@@ -200,24 +200,27 @@ if __name__ == "__main__":
 
 
     # Randomly order the tasks
-    tasks = ["ConstrainedReorient", "Bookshelf", "DrawerPick"]
+    # tasks = ["ConstrainedReorient", "Bookshelf", "DrawerPick"]
+    tasks = ["SequentialPick"]
     np.random.shuffle(tasks)
 
     task_names = {}
-    task_names["ConstrainedReorient"] = "Cabinet Reorientation"
-    task_names["Bookshelf"] = "Cabinet Pick"
-    task_names["DrawerPick"] = "Box Pick"
-    task_names["DrawerPickTrain"] = "Box Pick Training"
-    task_names["BookshelfTrain"] = "Cabinet Pick Training"
-    task_names["ConstrainedReorientTrain"] = "Cabinet Reorientation Training"
+    # task_names["ConstrainedReorient"] = "Cabinet Reorientation"
+    # task_names["Bookshelf"] = "Cabinet Pick"
+    # task_names["DrawerPick"] = "Box Pick"
+    # task_names["DrawerPickTrain"] = "Box Pick Training"
+    # task_names["BookshelfTrain"] = "Cabinet Pick Training"
+    # task_names["ConstrainedReorientTrain"] = "Cabinet Reorientation Training"
     task_names["Train"] = "Initial Training"
+    task_names["SequentialPick"] = "Sequential Pick"
+    task_names["SequentialPickTrain"] = "Sequential Pick Training"
     
-    train_tasks = ["Train", "BookshelfTrain", "ConstrainedReorientTrain", "DrawerPickTrain"]
-
+    # train_tasks = ["Train", "BookshelfTrain", "ConstrainedReorientTrain", "DrawerPickTrain"]
+    train_tasks = ["Train", "SequentialPickTrain"]
     tasks = train_tasks + tasks
 
     # Import controller config
-    if device == "keyboard":
+    if device == "keyboard" or device == "spacemouse":
         controller_name = "OSC_POSE"
     else:
         controller_name = "OSC_POSE_ABS"   
@@ -227,12 +230,14 @@ if __name__ == "__main__":
 
     # Go through each of the tasks
     for task in tasks:
+        print(f"Starting task: {task}")
 
         # Prompt user to begin the task
         prompt_user_for_input(f"The next task: {task_names[task]}. Check out the task summary, then press any key to continue.")
        
         # Randomly order the robot options
-        robots = ["Panda", "PandaWrist", "PandaSSLIM"]
+        # robots = ["Panda", "PandaWrist", "PandaSSLIM", ]
+        robots = ["PandaSSLIM", "PandaLEAP"]#,"PandaLEAP", "PandaLEAP", "PandaLEAP", ]
        
         if "Train" not in task:
             np.random.shuffle(robots)
@@ -254,6 +259,10 @@ if __name__ == "__main__":
                 initial_placement = np.array([-0.037, -1.025, 0.123, -1.996 ,-0.083, 0.998, -2.412])
             elif task == "DrawerPickTrain" and robot == "Panda":
                 initial_placement = np.array([-0.037, -1.025, 0.123, -1.996 ,-0.083, 0.998, -2.412])
+            elif task == "DrawerPick" and robot == "PandaLEAP":
+                initial_placement = np.array([-0.037, -1.025, 0.123, -1.996, -0.083, 0.998, -2.412, 1.290, 1.447])
+            elif task == "DrawerPickTrain" and robot == "PandaLEAP":
+                initial_placement = np.array([-0.037, -1.025, 0.123, -1.996, -0.083, 0.998, -2.412, 1.290, 1.447])
             else:
                 initial_placement = None
 
@@ -288,12 +297,12 @@ if __name__ == "__main__":
 
             # Wrap this environment in a data collection wrapper
             data_directory = args.directory + "/" + subject_name + "/" + task + "/" + robot + "/"
-            if task != "Train" and task != "DrawerPickTrain" and task != "BookshelfTrain" and task != "ConstrainedReorientTrain":
+            if "Train" not in task:
                 env = DataCollectionWrapper(env, data_directory)
 
             # Setup printing options for numbers
             np.set_printoptions(formatter={"float": lambda x: "{0:0.3f}".format(x)})
-
+            device_name = args.device
             # initialize device
             if args.device == "keyboard":
                 from robosuite.devices import Keyboard
@@ -303,24 +312,28 @@ if __name__ == "__main__":
                 env.viewer.add_keyrepeat_callback("any", device.on_press)
             elif args.device == "spacemouse":
                 from robosuite.devices import SpaceMouse
-                use_robotiq = False if (robot == "PandaSSLIM" or robot == "PandaSSLIMOG") else True
+                use_robotiq = True if (robot == "Panda" or robot == "PandaWrist") else False
+                use_leap = True if (robot == "PandaLEAP") else False
                 drawer = False if ("DrawerPick" not in task) else True
-                device = SpaceMouse(task, pos_sensitivity=args.pos_sensitivity, rot_sensitivity=args.rot_sensitivity, use_robotiq=use_robotiq, drawer=drawer)
+                device = SpaceMouse(task, pos_sensitivity=args.pos_sensitivity, rot_sensitivity=args.rot_sensitivity, use_robotiq=use_robotiq, use_leap=use_leap, drawer=drawer)
                 env.viewer.add_keypress_callback("any", device.on_press)
                 env.viewer.add_keyrepeat_callback("any", device.on_press)
             elif args.device == "oculus":
                 from robosuite.devices import Oculus
-                use_robotiq = False if (robot == "PandaSSLIM" or robot == "PandaSSLIMOG") else True
+                use_robotiq = True if (robot == "Panda" or robot == "PandaWrist") else False
+                use_leap = True if (robot == "PandaLEAP") else False
                 drawer = False if ("DrawerPick" not in task) else True
-                device = Oculus(env, task, pos_sensitivity=args.pos_sensitivity, rot_sensitivity=args.rot_sensitivity, use_robotiq=use_robotiq, drawer=drawer, hand=hand)
+                device = Oculus(env, task, pos_sensitivity=args.pos_sensitivity, rot_sensitivity=args.rot_sensitivity, use_robotiq=use_robotiq, use_leap=use_leap, drawer=drawer, hand=hand)
                 env.viewer.add_keypress_callback("any", device.on_press)
                 env.viewer.add_keyrepeat_callback("any", device.on_press)
             # else:
             #     raise Exception("Invalid device choice: choose either 'keyboard' or 'spacemouse'.")
 
 
-            # Set up a CSV file for the user to save the databbbb
-            file_path = "robosuite/data/" + subject_name + ".csv"
+            # Set up a CSV file for the user to save the data
+            file_path = "../data/" + subject_name + ".csv"
+            # Make sure the directory exists
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
             if not os.path.exists(file_path):
                 # Column labels
@@ -346,17 +359,13 @@ if __name__ == "__main__":
                     device.start_control()
 
                     while True:
-
                         # Set active robot
                         active_robot = env.robots[0] if args.config == "bimanual" else env.robots[args.arm == "left"]
-
                         # Get the newest action
                         action, grasp = input2action(device=device, robot=active_robot, active_arm=args.arm, env_configuration=args.config)
-
                         # If action is none, then this a reset so we should break
                         if action is None:
                             break
-
                         # If the current grasp is active (1) and last grasp is not (-1) (i.e.: grasping input just pressed),
                         # toggle arm control and / or camera viewing angle if requested
                         if last_grasp < 0 < grasp:
@@ -365,7 +374,7 @@ if __name__ == "__main__":
                             if args.toggle_camera_on_grasp:
                                 cam_id = (cam_id + 1) % num_cam
                                 env.viewer.set_camera(camera_id=cam_id)
-                                
+
                         # Update last grasp
                         last_grasp = grasp
 
@@ -393,7 +402,6 @@ if __name__ == "__main__":
                         obs, reward, done, info = env.step(action)
 
                         links2check = ["robot0_link0_collision",  "robot0_link1_collision",  "robot0_link2_collision", "robot0_link3_collision", "robot0_link4_collision", "robot0_link5_collision", "robot0_link6_collision", "robot0_link7_collision", "robot0_forearm_col_0", "robot0_forearm_col_1", "robot0_forearm_col_2", "robot0_forearm_col_3"]
-                        
                         for i in range(env.sim.data.ncon):
                             con = env.sim.data.contact[i]
                             bool1 = env.sim.model.geom_id2name(con.geom1) in links2check and env.sim.model.geom_id2name(con.geom2) not in links2check
@@ -406,7 +414,6 @@ if __name__ == "__main__":
 
                         check_finger = [ "gripper0_distal_left", "gripper0_distal_right", "gripper0_proximal_left", "gripper0_proximal_right""gripper0_base_mount", "gripper0_base", "gripper0_driver_right", "gripper0_driver_left", "gripper0_follower_left", "gripper0_follower_right", "gripper0_coupler_left", "gripper0_coupler_right", "gripper0_spring_link_left", "gripper0_spring_link_right"]
                         check_drawer = ["drawer_collision"]
-
                         for i in range(env.sim.data.ncon):
                             cont = env.sim.data.contact[i]
                             bool1 = env.sim.model.geom_id2name(cont.geom1) in check_finger and env.sim.model.geom_id2name(cont.geom2) in check_drawer
@@ -414,21 +421,23 @@ if __name__ == "__main__":
                             if bool1 or bool2:
                                 contact_pos = cont.pos
                                 env.viewer.viewer.add_marker(type=const.GEOM_SPHERE, pos=contact_pos, size=np.array([0.02, 0.02, 0.02]), label='contact', rgba=[0.592, 0.863, 1, .4])
-
+                        
                         if task == "ConstrainedReorient":
                             trial_ended, success, success_time, trial = env._check_success()
                             if trial_ended:
                                 if success == 2: # True success
                                     env.viewer.viewer.add_marker(type=const.GEOM_ARROW, pos=env.goal_pos, mat=euler2mat([np.pi, 0, 0]), label='', size=[0.01, 0.01, 0.6], rgba=[0, 1, 0, 1])
-                                save_data(file_path, subject_name, task, robot, trial, success, success_time, reset=device.oculus_policy.number_of_resets)
-                                # print number of resets
-                                
+                                if device_name == "oculus":
+                                    num_resets = device.oculus_policy.number_of_resets
+                                else:
+                                    num_resets = 0
+                                save_data(file_path, subject_name, task, robot, trial, success, success_time, reset=num_resets)
                                 env.render()
-                                print("Here ")
                                 time.sleep(3)
                                 device._reset_internal_state()
-                                device.oculus_policy.reinitialize_policy()
-                                device.oculus_policy.number_of_resets = 0
+                                if device_name == "oculus":
+                                    device.oculus_policy.reinitialize_policy()
+                                    device.oculus_policy.number_of_resets = 0
                             else:
                                 if success == 1:
                                     env.viewer.viewer.add_marker(type=const.GEOM_ARROW, pos=env.goal_pos, mat=euler2mat([np.pi, 0, 0]), label='', size=[0.01, 0.01, 0.6], rgba=[0.902, .616, .094, .6])
@@ -441,7 +450,8 @@ if __name__ == "__main__":
                             if new: 
                                 time.sleep(1) 
                                 device._reset_internal_state()
-                                device.oculus_policy.reinitialize_policy()
+                                if device_name == "oculus":
+                                    device.oculus_policy.reinitialize_policy()
                                 env.render()
                                 if finish:
                                     raise Exception("Finish")
@@ -453,18 +463,64 @@ if __name__ == "__main__":
                             else:
                                 env.viewer.viewer.add_marker(type=const.GEOM_ARROW, pos=env.goal_pos, mat=euler2mat([np.pi, 0, 0]), label='', size=[0.01, 0.01, 0.6], rgba=[1, 0, 0, .4])
 
+                        elif task == "SequentialPick":
+                            trial_ended, success, object_1_placed, object_2_placed, success_time, trial = env._check_success()
+                                                        
+                            if success:
+                                env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=[0.41, 0.0, 1.583], label='Success!', size=[2,2,2], rgba=[0, 0, 1, 1])
+                            elif object_1_placed:
+                                env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=[0.41, 0.01, 1.583], label='Placed', size=[1,1,1], rgba=[0, 0, 1, 1])
+                            elif object_2_placed:
+                                env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=[0.41, -0.01, 1.583], label='Placed', size=[1,1,1], rgba=[0, 0, 1, 1])
+                            
+                            if trial_ended: 
+                                env.render()
+                                time.sleep(3)
+                                device._reset_internal_state()
+                                if device_name == "oculus":
+                                    device.oculus_policy.reinitialize_policy()
+                                    device.oculus_policy.number_of_resets = 0
+                                save_data(file_path, subject_name, task, robot, trial, success, success_time)
+
+                        elif task == "SequentialPickTrain":
+                            new, success, object_1_placed, object_2_placed, finish = env._check_success()
+
+                            if success:
+                                env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=[0.41, 0.0, 1.583], label='Success!', size=[2,2,2], rgba=[0, 0, 1, 1])
+                            elif object_1_placed:
+                                env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=[0.41, 0.01, 1.583], label='Placed', size=[1,1,1], rgba=[0, 0, 1, 1])
+                            elif object_2_placed:
+                                env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=[0.41, -0.01, 1.583], label='Placed', size=[1,1,1], rgba=[0, 0, 1, 1])
+
+
+                            if new: 
+                                time.sleep(1) 
+                                device._reset_internal_state()
+                                if device_name == "oculus":
+                                    device.oculus_policy.reinitialize_policy()
+                                env.render()
+                                if finish:
+                                    raise Exception("Finish")
+
 
                         elif task == "Bookshelf":
                             trial_ended, success, success_time, disturbance, num_fallen_objects, trial = env._check_success()
                             if trial_ended:
                                 if success: 
                                     env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=env.goal_object_pos, label='Success!', size=[1,1,1], rgba=[0, 0, 1, 1])
-                                save_data(file_path, subject_name, task, robot, trial, success, success_time, disturbance, num_fallen_objects, reset=device.oculus_policy.number_of_resets)
+                                if device_name == "oculus":
+                                    num_resets = device.oculus_policy.number_of_resets
+                                else:
+                                    num_resets = 0
+                                save_data(file_path, subject_name, task, robot, trial, success, success_time, disturbance, num_fallen_objects, reset=num_resets)
                                 env.render()                                
                                 time.sleep(3)
                                 device._reset_internal_state()
-                                device.oculus_policy.reinitialize_policy()
-                                device.oculus_policy.number_of_resets = 0
+
+                                print("reset internal state")
+                                if device_name == "oculus":
+                                    device.oculus_policy.reinitialize_policy()
+                                    device.oculus_policy.number_of_resets = 0
 
                         elif task == "BookshelfTrain":
                             new, finish = env._check_success()
@@ -472,7 +528,8 @@ if __name__ == "__main__":
                                 time.sleep(1)
                                 env.render()
                                 device._reset_internal_state()
-                                device.oculus_policy.reinitialize_policy()
+                                if device_name == "oculus":
+                                    device.oculus_policy.reinitialize_policy()
                             if finish:
                                 raise Exception("Finish")
                                 
@@ -481,13 +538,18 @@ if __name__ == "__main__":
                             if trial_ended: 
                                 if success:
                                     env.viewer.viewer.add_marker(type=const.GEOM_LABEL, pos=env.place_object_pos, label='Success!', size=[1,1,1], rgba=[0, 0, 1, 1])
-                                save_data(file_path, subject_name, task, robot, trial, success, success_time, reset=device.oculus_policy.number_of_resets)
+                                if device_name == "oculus":
+                                    num_resets = device.oculus_policy.number_of_resets
+                                else:
+                                    num_resets = 0
+                                save_data(file_path, subject_name, task, robot, trial, success, success_time, reset=num_resets)
                                 
                                 env.render()
                                 time.sleep(3)
                                 device._reset_internal_state()
-                                device.oculus_policy.reinitialize_policy()
-                                device.oculus_policy.number_of_resets = 0
+                                if device_name == "oculus":
+                                    device.oculus_policy.reinitialize_policy()
+                                    device.oculus_policy.number_of_resets = 0
 
                         elif task == "DrawerPickTrain":
                             new, finish = env._check_success()
@@ -496,7 +558,8 @@ if __name__ == "__main__":
                                 time.sleep(1)
                                 env.render()
                                 device._reset_internal_state()
-                                device.oculus_policy.reinitialize_policy()
+                                if device_name == "oculus":
+                                    device.oculus_policy.reinitialize_policy()
                                 if finish:
                                     raise Exception("Finish")
 
