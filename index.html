@@ -95,6 +95,10 @@
             <span class="author-block">
               <a href="https://www.unibo.it/sitoweb/alessandr.bernardin5/en">Alessandra Bernardini</a><sup>2</sup>,</span>
             <span class="author-block">
+              <a href="https://hao-l1.github.io/">Hao Li</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://chengyi-xing.com/">Chengi Xing</a><sup>2</sup>,</span>
+            <span class="author-block">
               <a href="https://www.linkedin.com/in/amar-hajj-ahmad-ph-d-350627128/">Amar Hajj-Ahmad</a><sup>1</sup>,
             </span>
             <span class="author-block">
@@ -209,10 +213,11 @@
         <div class="content has-text-justified">
           <p>
             Operation in constrained and cluttered spaces poses a challenge for robotic manipulators, in part due to their bulky link geometry and kinematic limitations in comparison to human hands and arms.
-            To address these limitations, we introduce SLIM, a custom end-effector consisting of an ambidextrous hand and an integrated 2-DoF wrist. 
-            With an opposing thumb that tucks alongside the palm, and fingers that bend in both directions, the hand is shaped like an articulated paddle for reaching through gaps and maneuvering in clutter. Series elastic actuation decouples finger inertia from motor inertia, enabling use of small geared motors for forceful grasps while maintaining a low effective end-point mass to reduce impact forces. The thumb is mounted on a prismatic axis that adjusts grasp width for large or small objects. 
-            We illustrate some advantages of the design over conventional solutions with a computed increase in dexterous workspace and decreases in end-point mass and swept volume when reorienting objects.
-            In tests aimed at training by demonstration, users provided with a dynamic simulation of SLIM completed tasks in cluttered environments faster and with higher success rates than with a conventional gripper, even when equipped with a supplemental wrist.
+            To address these limitations, we introduce SLIM, a custom end-effector consisting of a bidirectional hand and an integrated 2-axis wrist. 
+            With an opposing thumb that tucks alongside the palm and fingers that bend in both directions, the hand is shaped like an articulated paddle for reaching through gaps and maneuvering in clutter. Series elastic actuation decouples finger inertia from motor inertia, enabling use of small, highly-geared motors for forceful grasps while maintaining a low effective end-point mass.
+            The thumb is mounted on a prismatic axis that adjusts grasp width for large or small objects. 
+            We illustrate advantages of the design over conventional solutions with a computed increase in grasp acquisition region, decrease in swept volume when reorienting objects, and reduced end-point mass. 
+            SLIM’s thin form factor enables faster and more successful teleoperated task completion in constrained environments compared to a conventional parallel-jaw gripper. Additionally, its bidirectional fingers allow demonstrators to complete a sequential picking task more efficiently than with an anthropomorphic hand.
           </p>
         </div>
       </div>
@@ -370,7 +375,7 @@
   <div class="hero-body">
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
-        <h2 class="title is-3">User Study Example Trials</h2>
+        <h2 class="title is-3">Teleoperation Study 1 — Example Trials</h2>
       </div>
     </div>
 
@@ -431,7 +436,7 @@
                 <source src="./static/videos/Wrist_BP_trimmed.mp4" type="video/mp4">
             </video>
         </div>
-        <div class="row-label">SLIM</div>
+        <div class="row-label">SLIM + Wrist</div>
         <div class="video-container">
             <video autoplay loop muted playsinline>
                 <source src="./static/videos/SLIM_CP_trimmed.mp4" type="video/mp4">
@@ -449,6 +454,43 @@
         </div>
     </div>
 </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Teleoperation Study 2 — Example Trials</h2>
+      </div>
+    </div>
+
+    <div class="video-section">
+      <div class="video-wrapper">
+        <div class="video-item">
+          <h2 class="video-subheading">LEAP+Wrist:<br>Exiting the Cabinet Before Rotating Takes Time</h2>
+          <video autoplay loop muted>
+            <source src="static/videos/LEAP_SequentialPick_remove.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div class="video-item">
+          <h2 class="video-subheading">LEAP+Wrist:<br>Rotating Within Cabinet May Disturb Objects</h2>
+          <video autoplay loop muted>
+            <source src="static/videos/LEAP_SequentialPick_push.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div class="video-item">
+          <h2 class="video-subheading">SLIM+Wrist:<br>Bidirection Fingers Enable Straightforward Strategy</h2>
+          <video autoplay loop muted>
+            <source src="static/videos/SLIM_SequentialPick.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </div>
+ 
+
 </section>
 
 
