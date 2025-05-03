@@ -2,7 +2,7 @@
 This project uses [robosuite](https://github.com/ARISE-Initiative/robosuite), a modular simulation framework for robot learning developed by Zhu et al. (2020). We have modified robosuite to add new robot models (including the model for SLIM and our custom differential wrist), new tasks, and an Oculus Meta Quest teleoperation interface. The Meta Quest interfaces utilizes [oculus_reader](https://github.com/rail-berkeley/oculus_reader) by Jedrzej Orbik and Frederik Ebert (2021).
 
 ## Models
-* See the following [python class for the SLIM hand](robosuite/models/grippers/sslim_gripper.py) which points to the [MuJoCo XML for SLIM](robosuite/models/assets/grippers/sslim_hand_CH.xml)
+* See the following [python class for the SLIM hand](robosuite/models/grippers/sslim_hand.py) which points to the [MuJoCo XML for SLIM](robosuite/models/assets/grippers/sslim_hand_CH.xml)
 * The following includes the [python class for the Franka arm appended with our supplemental wrist](https://github.com/rthomasson23/slim-gym/blob/master/robosuite/models/robots/manipulators/panda_sslim.py)
 
 ## Tasks
